@@ -1,0 +1,37 @@
+import pandas as pd
+from pathlib import Path
+import re
+
+DATA_DIR = Path(__file__).resolve().parents[1]  # .../Data
+RAW_DIR = DATA_DIR / "Raw"
+CLEAN_DIR = DATA_DIR / "Clean"
+CLEAN_DIR.mkdir(exist_ok=True)
+
+INFILE = RAW_DIR / "GDP_Overtime_2.csv"
+OUTFILE = CLEAN_DIR / "gdp_pc_current_usd_clean_long.csv"
+
+df = pd.read_csv(INFILE)
+
+# Keep the intended series (GDP per capita current US$)
+df = df[df["Series Code"] == "NY.GDP.PCAP.CD"].copy()
+
+year_cols = [c for c in df.columns if re.match(r"^\d{4}\s*\[YR\d{4}\]$", str(c))]
+
+long = df.melt(
+    id_vars=["Country Name", "Country Code"],
+    value_vars=year_cols,
+    var_name="year",
+    value_name="gdp_pc_current_usd",
+)
+
+long["year"] = long["year"].astype(str).str.extract(r"(\d{4})").astype("Int64")
+long["gdp_pc_current_usd"] = pd.to_numeric(long["gdp_pc_current_usd"], errors="coerce")
+
+long = long.dropna(subset=["gdp_pc_current_usd"]).sort_values(["Country Code", "year"]).reset_index(drop=True)
+
+# optional: log transform for regressions
+long["log_gdp_pc_current_usd"] = (long["gdp_pc_current_usd"] + 1).apply(__import__("math").log)
+
+print(long.head())
+long.to_csv(OUTFILE, index=False)
+print("Saved:", OUTFILE)

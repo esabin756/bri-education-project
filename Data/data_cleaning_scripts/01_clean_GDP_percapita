@@ -1,0 +1,48 @@
+import pandas as pd
+from pathlib import Path
+
+DATA_DIR = Path(__file__).resolve().parents[1]
+RAW_DIR = DATA_DIR / "Raw"
+OUT_DIR = DATA_DIR / "Clean"
+OUT_DIR.mkdir(exist_ok=True)
+
+# ---- Load ----
+path = RAW_DIR / "GDP_percapita_growth.csv"
+df = pd.read_csv(path)
+
+# ---- Clean missing values ----
+df = df.replace("..", pd.NA)
+
+id_cols = ["Country Name", "Country Code"]
+year_cols = [c for c in df.columns if "[YR" in c]
+
+# ---- Wide -> Long ----
+long = df.melt(
+    id_vars=id_cols,
+    value_vars=year_cols,
+    var_name="year",
+    value_name="gdp_pc",
+)
+
+# ---- Extract year ----
+long["year"] = long["year"].str.extract(r"(\d{4})").astype("Int64")
+
+# ---- Convert GDP to numeric ----
+long["gdp_pc"] = pd.to_numeric(long["gdp_pc"], errors="coerce")
+
+# ---- Drop missing ----
+long = long.dropna(subset=["gdp_pc", "year"])
+
+# ---- Remove duplicates ----
+long = long.drop_duplicates(subset=["Country Code", "year"])
+
+# ---- Sort ----
+long = long.sort_values(["Country Code", "year"]).reset_index(drop=True)
+
+print("Clean shape:", long.shape)
+print(long.head())
+
+# ---- Save ----
+outpath = OUT_DIR / "gdp_per_capita_world_clean.csv"
+long.to_csv(outpath, index=False)
+print("Saved:", outpath)

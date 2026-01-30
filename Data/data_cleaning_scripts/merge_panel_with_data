@@ -1,0 +1,65 @@
+import pandas as pd
+from pathlib import Path
+
+DATA_DIR = Path(__file__).resolve().parents[1]
+PANEL_DIR = DATA_DIR / "Panel"
+AID_DIR = DATA_DIR / "clean_aid_data"
+
+PANEL_IN = PANEL_DIR / "panel_country_year_1990_2024_with_bri.csv"
+AID_IN = AID_DIR / "aiddata_gcdf_country_year.csv"
+
+OUT = PANEL_DIR / "panel_country_year_2000_2021_with_bri_and_aiddata.csv"
+
+# --- read ---
+panel = pd.read_csv(PANEL_IN)
+aid = pd.read_csv(AID_IN)
+
+# --- standardize merge keys ---
+panel.columns = panel.columns.astype(str).str.strip().str.strip('"')
+aid.columns = aid.columns.astype(str).str.strip().str.strip('"')
+
+# Ensure key columns exist
+for df, name in [(panel, "panel"), (aid, "aiddata")]:
+    if "Country Code" not in df.columns:
+        raise ValueError(f"{name} is missing 'Country Code'. Columns: {df.columns.tolist()[:15]}")
+    if "year" not in df.columns:
+        raise ValueError(f"{name} is missing 'year'. Columns: {df.columns.tolist()[:15]}")
+
+panel["year"] = pd.to_numeric(panel["year"], errors="coerce").astype("Int64")
+aid["year"] = pd.to_numeric(aid["year"], errors="coerce").astype("Int64")
+
+# --- keep only aiddata columns we need (prevents duplicate/unwanted columns) ---
+keep_aid_cols = ["Country Code", "year"]
+for c in ["projects", "usd_const_2021", "log1p_usd_const_2021", "share_amount_estimated"]:
+    if c in aid.columns:
+        keep_aid_cols.append(c)
+
+aid = aid[keep_aid_cols].copy()
+
+# --- merge ---
+merged = panel.merge(aid, on=["Country Code", "year"], how="left")
+
+# --- filter to year 2000-2021 ---
+merged = merged[(merged["year"] >= 2000) & (merged["year"] <= 2021)].copy()
+
+# --- fill missing AidData exposure with 0 (meaning: no recorded projects that year) ---
+for c in ["projects", "usd_const_2021", "log1p_usd_const_2021"]:
+    if c in merged.columns:
+        merged[c] = merged[c].fillna(0)
+
+# share_amount_estimated is not meaningful when no projects → keep NaN or set to 0
+if "share_amount_estimated" in merged.columns:
+    merged["share_amount_estimated"] = merged["share_amount_estimated"].fillna(0)
+
+# --- quick checks ---
+print("Merged rows:", len(merged), "cols:", merged.shape[1])
+print("AidData years present:", merged.loc[merged["projects"] > 0, "year"].min(),
+      "to", merged.loc[merged["projects"] > 0, "year"].max())
+
+# optional: check duplicates
+dupes = merged.duplicated(subset=["Country Code", "year"]).sum()
+print("Duplicate (Country Code, year) rows:", dupes)
+
+merged.to_csv(OUT, index=False)
+print("Saved:", OUT)
+print(merged.head())

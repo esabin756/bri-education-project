@@ -1,0 +1,35 @@
+import pandas as pd
+import statsmodels.formula.api as smf
+import os
+
+# Create output folder if it doesn't exist
+output_folder = "Data/Regressions/outputs"
+os.makedirs(output_folder, exist_ok=True)
+
+df = pd.read_csv("Data/Panel/panel_country_year_2000_2021_with_bri_and_aiddata.csv")
+
+outcome = "secondary_enroll_gross_pct"
+
+# Only drop NAs for columns actually used
+df_model = df.dropna(subset=[outcome, "post_join", "Country Code", "year"]).copy()
+
+# Optional: keep countries with at least 5 observations
+counts = df_model.groupby("Country Code")["year"].count()
+df_model = df_model[df_model["Country Code"].isin(counts[counts >= 5].index)].copy()
+
+formula = f"{outcome} ~ post_join + C(year) + C(Q('Country Code'))"
+
+model = smf.ols(formula=formula, data=df_model).fit(
+    cov_type="cluster",
+    cov_kwds={"groups": df_model["Country Code"]}
+)
+
+
+# Write results to output file
+output_file = os.path.join(output_folder, "analysis_DiD_nocontrols_results.txt")
+with open(output_file, "w") as f:
+    f.write(model.summary().as_text())
+    f.write("\n\nKey effect (post_join):\n")
+    f.write(f"{model.params['post_join']} (SE: {model.bse['post_join']})\n")
+
+print(f"Results saved to {output_file}")

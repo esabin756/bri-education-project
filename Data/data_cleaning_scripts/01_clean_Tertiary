@@ -1,0 +1,68 @@
+import pandas as pd
+from pathlib import Path
+
+DATA_DIR = Path(__file__).resolve().parents[1]   # .../Data
+RAW_DIR = DATA_DIR / "Raw"
+OUT_DIR = DATA_DIR / "Clean"
+OUT_DIR.mkdir(exist_ok=True)
+
+INFILE = RAW_DIR / "Tertiary_enrollment.csv"   # change if your exact filename differs
+OUTFILE = OUT_DIR / "tertiary_enrollment_clean_long.csv"
+
+HEADER_TEXT = '"Country Name","Country Code","Indicator Name","Indicator Code"'
+
+def find_header_line_index(path: Path) -> int:
+    # Find the line number where the real header begins
+    with path.open(encoding="utf-8-sig", errors="replace") as f:
+        for i, line in enumerate(f):
+            if line.lstrip().startswith(HEADER_TEXT):
+                return i
+    raise ValueError("Could not find the WDI header line in the file.")
+
+header_idx = find_header_line_index(INFILE)
+
+# Read starting at the header line; use it as the header row
+df = pd.read_csv(INFILE, skiprows=header_idx, header=0, encoding="utf-8-sig")
+
+# Normalize column names (BOM/whitespace)
+df.columns = (
+    df.columns.astype(str)
+    .str.replace("\ufeff", "", regex=False)
+    .str.strip()
+    .str.strip('"')
+)
+
+# Drop empty/unnamed columns
+df = df.loc[:, ~df.columns.str.contains(r"^Unnamed", case=False, regex=True)]
+df = df.dropna(axis=1, how="all")
+
+id_cols = ["Country Name", "Country Code", "Indicator Name", "Indicator Code"]
+year_cols = [c for c in df.columns if c.isdigit()]
+
+if not all(c in df.columns for c in id_cols):
+    raise ValueError(f"Missing ID cols. Got columns starting: {df.columns.tolist()[:12]}")
+if not year_cols:
+    raise ValueError(f"No year columns found. Got columns starting: {df.columns.tolist()[:12]}")
+
+long = df.melt(
+    id_vars=id_cols,
+    value_vars=year_cols,
+    var_name="year",
+    value_name="tertiary_enrollment_gross_pct",
+)
+
+long["year"] = long["year"].astype("Int64")
+long["tertiary_enrollment_gross_pct"] = pd.to_numeric(long["tertiary_enrollment_gross_pct"], errors="coerce")
+long = long.dropna(subset=["tertiary_enrollment_gross_pct"])
+
+# Keep only tertiary enrollment indicator (safe even if file contains only it)
+long = long[long["Indicator Code"] == "SE.TER.ENRR"].copy()
+
+long = long.sort_values(["Country Code", "year"]).reset_index(drop=True)
+
+print("Header line index:", header_idx)
+print("Wide shape:", df.shape, " Long shape:", long.shape)
+print(long.head())
+
+long.to_csv(OUTFILE, index=False)
+print("Saved:", OUTFILE)

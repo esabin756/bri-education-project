@@ -1,0 +1,32 @@
+import pandas as pd
+from pathlib import Path
+import numpy as np
+
+DATA_DIR = Path(__file__).resolve().parents[1]  # .../Data
+RAW_DIR = DATA_DIR / "BRI_Data"
+CLEAN_DIR = DATA_DIR / "Clean_BRI_entry"
+CLEAN_DIR.mkdir(exist_ok=True)
+
+INFILE = RAW_DIR / "25_05_BRI-countries-public.xlsx"
+OUTFILE = CLEAN_DIR / "bri_membership_with_region_income.csv"
+
+df = pd.read_excel(INFILE, sheet_name="BRI countries")
+
+# Keep only what we need (added Region + IncomeGroup)
+df = df[[
+    "Country",
+    "Country Code",
+    "Likely date of joining",
+    "Likely date of exit",
+    "Region",
+    "IncomeGroup"
+]].copy()
+
+df["join_year"] = pd.to_datetime(df["Likely date of joining"], errors="coerce").dt.year
+df["join_year"] = df["join_year"].astype("Int64")
+
+out = df[["Country Code", "join_year", "Region", "IncomeGroup"]].drop_duplicates()
+
+out.to_csv(OUTFILE, index=False)
+print("Saved:", OUTFILE)
+print(out.head())

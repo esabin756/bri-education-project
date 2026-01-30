@@ -1,0 +1,43 @@
+import pandas as pd
+from pathlib import Path
+import re
+
+DATA_DIR = Path(__file__).resolve().parents[1]
+RAW_DIR = DATA_DIR / "Raw"
+CLEAN_DIR = DATA_DIR / "Clean"
+CLEAN_DIR.mkdir(exist_ok=True)
+
+INFILE = RAW_DIR / "Average_years_school_2.csv"
+OUTFILE = CLEAN_DIR / "avg_years_schooling_clean_long.csv"
+
+df = pd.read_csv(INFILE)
+
+# Identify year columns like "1970 [YR1970]"
+year_cols = [c for c in df.columns if re.match(r"^\d{4}\s*\[YR\d{4}\]$", str(c))]
+
+# Map the three series you care about to nice labels
+series_map = {
+    "UIS.EA.MEAN.1T6.AG25T99": "both",
+    "UIS.EA.MEAN.1T6.AG25T99.FE": "female",
+    "UIS.EA.MEAN.1T6.AG25T99.MA": "male",
+}
+
+df = df[df["Series Code"].isin(series_map.keys())].copy()
+df["sex"] = df["Series Code"].map(series_map)
+
+long = df.melt(
+    id_vars=["Country Name", "Country Code", "sex"],
+    value_vars=year_cols,
+    var_name="year",
+    value_name="avg_schooling_years",
+)
+
+long["year"] = long["year"].astype(str).str.extract(r"(\d{4})").astype("Int64")
+long["avg_schooling_years"] = pd.to_numeric(long["avg_schooling_years"], errors="coerce")
+long = long.dropna(subset=["avg_schooling_years"])
+
+long = long.sort_values(["Country Code", "sex", "year"]).reset_index(drop=True)
+
+print(long.head())
+long.to_csv(OUTFILE, index=False)
+print("Saved:", OUTFILE)

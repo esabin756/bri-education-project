@@ -1,0 +1,107 @@
+import pandas as pd
+from pathlib import Path
+
+START_YEAR = 1990
+END_YEAR = 2024  # change if you want (e.g., 2023)
+
+DATA_DIR = Path(__file__).resolve().parents[1]   # .../Data
+CLEAN_DIR = DATA_DIR / "Clean"
+PANEL_DIR = DATA_DIR / "Panel"
+PANEL_DIR.mkdir(exist_ok=True)
+
+OUTFILE = PANEL_DIR / f"panel_country_year_{START_YEAR}_{END_YEAR}.csv"
+
+def read_clean(filename: str) -> pd.DataFrame:
+    path = CLEAN_DIR / filename
+    if not path.exists():
+        raise FileNotFoundError(f"Missing file: {path}")
+    return pd.read_csv(path)
+
+def norm_cols(df: pd.DataFrame) -> pd.DataFrame:
+    df.columns = (
+        df.columns.astype(str)
+        .str.replace("\ufeff", "", regex=False)
+        .str.strip()
+        .str.strip('"')
+    )
+    return df
+
+def keep_cols(df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
+    missing = [c for c in cols if c not in df.columns]
+    if missing:
+        raise KeyError(f"Missing columns {missing}. Available: {df.columns.tolist()[:20]}")
+    return df[cols].copy()
+
+def enforce_year(df: pd.DataFrame) -> pd.DataFrame:
+    df["year"] = pd.to_numeric(df["year"], errors="coerce").astype("Int64")
+    df = df.dropna(subset=["Country Code", "year"])
+    return df
+
+# ---- Load the cleaned long files you already created ----
+# Avg schooling (keep sex == both)
+school = norm_cols(read_clean("avg_years_schooling_clean_long.csv"))
+if "sex" not in school.columns:
+    raise ValueError("avg_years_schooling_clean_long.csv must include a 'sex' column.")
+school = school[school["sex"].astype(str).str.lower().eq("both")].copy()
+school = keep_cols(school, ["Country Code", "year", "avg_schooling_years"])
+school = enforce_year(school)
+
+primary = norm_cols(read_clean("primary_school_enrollment_clean_long.csv"))
+primary = keep_cols(primary, ["Country Code", "year", "primary_enrollment_gross_pct"])
+primary = primary.rename(columns={"primary_enrollment_gross_pct": "primary_enroll_gross_pct"})
+primary = enforce_year(primary)
+
+secondary = norm_cols(read_clean("secondary_school_enrollment_clean_long.csv"))
+secondary = keep_cols(secondary, ["Country Code", "year", "secondary_enrollment_gross_pct"])
+secondary = secondary.rename(columns={"secondary_enrollment_gross_pct": "secondary_enroll_gross_pct"})
+secondary = enforce_year(secondary)
+
+tertiary = norm_cols(read_clean("tertiary_enrollment_clean_long.csv"))
+tertiary = keep_cols(tertiary, ["Country Code", "year", "tertiary_enrollment_gross_pct"])
+tertiary = tertiary.rename(columns={"tertiary_enrollment_gross_pct": "tertiary_enroll_gross_pct"})
+tertiary = enforce_year(tertiary)
+
+pop = norm_cols(read_clean("total_population_clean_long.csv"))
+pop = keep_cols(pop, ["Country Code", "year", "population_total"])
+pop = enforce_year(pop)
+
+urban = norm_cols(read_clean("percent_urban_clean_long.csv"))
+# If your urban file uses a different value column name, change it here.
+# Common names: percent_urban, urban_pct, value
+urban_value_col = "percent_urban" if "percent_urban" in urban.columns else ("value" if "value" in urban.columns else ("pct_urban" if "pct_urban" in urban.columns else None))
+if urban_value_col is None:
+    raise ValueError(f"Can't find urban value column. Columns start: {urban.columns.tolist()[:15]}")
+urban = keep_cols(urban, ["Country Code", "year", urban_value_col])
+urban = urban.rename(columns={urban_value_col: "percent_urban"})
+urban = enforce_year(urban)
+
+pol = norm_cols(read_clean("political_stability_clean_long.csv"))
+pol_value_col = "political_stability" if "political_stability" in pol.columns else ("value" if "value" in pol.columns else None)
+if pol_value_col is None:
+    raise ValueError(f"Can't find political stability value column. Columns start: {pol.columns.tolist()[:15]}")
+pol = keep_cols(pol, ["Country Code", "year", pol_value_col])
+pol = pol.rename(columns={pol_value_col: "political_stability"})
+pol = enforce_year(pol)
+
+# NEW GDP from GDP_Overtime_2 (already cleaned to long)
+gdp = norm_cols(read_clean("gdp_pc_current_usd_clean_long.csv"))
+# prefer the logged version if present
+gdp_col = "log_gdp_pc_current_usd" if "log_gdp_pc_current_usd" in gdp.columns else "gdp_pc_current_usd"
+gdp = keep_cols(gdp, ["Country Code", "year", gdp_col])
+gdp = gdp.rename(columns={gdp_col: gdp_col})
+gdp = enforce_year(gdp)
+
+# ---- Merge (outer keeps all available country-years) ----
+panel = school
+for d in [primary, secondary, tertiary, pop, urban, pol, gdp]:
+    panel = panel.merge(d, on=["Country Code", "year"], how="outer")
+
+# ---- Filter years 1990–END_YEAR ----
+panel = panel[(panel["year"] >= START_YEAR) & (panel["year"] <= END_YEAR)].copy()
+
+panel = panel.sort_values(["Country Code", "year"]).reset_index(drop=True)
+panel.to_csv(OUTFILE, index=False)
+
+print("Saved:", OUTFILE)
+print("Rows:", len(panel), "Cols:", panel.shape[1])
+print(panel.head())

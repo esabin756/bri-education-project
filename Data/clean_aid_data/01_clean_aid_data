@@ -1,0 +1,63 @@
+import pandas as pd
+from pathlib import Path
+import numpy as np
+
+# ---- adjust these paths to your repo structure ----
+DATA_DIR = Path(__file__).resolve().parents[1]  # .../Data
+RAW_DIR = DATA_DIR / "Raw_Aid_Data"
+CLEAN_DIR = DATA_DIR / "clean_aid_data"
+CLEAN_DIR.mkdir(exist_ok=True)
+
+INFILE = RAW_DIR / "AidDatasGlobalChineseDevelopmentFinanceDataset_v3.0.xlsx"
+SHEET = "GCDF_3.0"
+OUTFILE = CLEAN_DIR / "aiddata_gcdf_country_year.csv"
+
+USECOLS = [
+    "AidData Record ID",
+    "Recommended For Aggregates",
+    "Recipient ISO-3",
+    "Commitment Year",
+    "Status",
+    "Sector Name",
+    "Adjusted Amount (Constant USD 2021)",
+    "Amount Estimated",
+]
+
+df = pd.read_excel(INFILE, sheet_name=SHEET, usecols=USECOLS)
+
+# Keep only records AidData recommends for aggregate analysis
+df = df[df["Recommended For Aggregates"].astype(str).str.strip().str.lower().eq("yes")].copy()
+
+# Standardize keys
+df = df.rename(columns={"Recipient ISO-3": "Country Code", "Commitment Year": "year"})
+df["year"] = pd.to_numeric(df["year"], errors="coerce").astype("Int64")
+df = df.dropna(subset=["Country Code", "year"])
+
+# Amount to numeric
+df["usd_const_2021"] = pd.to_numeric(df["Adjusted Amount (Constant USD 2021)"], errors="coerce")
+
+# Aggregate to country-year
+agg = (
+    df.groupby(["Country Code", "year"], as_index=False)
+      .agg(
+          projects=("AidData Record ID", "nunique"),
+          usd_const_2021=("usd_const_2021", "sum"),
+          share_amount_estimated=("Amount Estimated", lambda s: (s.astype(str).str.lower() == "yes").mean()),
+      )
+)
+
+# Fill missing USD sums as 0 (means: projects might exist with missing dollar estimates)
+agg["usd_const_2021"] = agg["usd_const_2021"].fillna(0)
+
+# log transform for modeling
+agg["log1p_usd_const_2021"] = np.log1p(agg["usd_const_2021"])
+
+# Optional: restrict to your panel window now (1990–2024)
+agg = agg[(agg["year"] >= 1990) & (agg["year"] <= 2024)].copy()
+
+agg = agg.sort_values(["Country Code", "year"]).reset_index(drop=True)
+
+agg.to_csv(OUTFILE, index=False)
+print("Saved:", OUTFILE)
+print("Rows:", len(agg), "Countries:", agg["Country Code"].nunique())
+print(agg.head())

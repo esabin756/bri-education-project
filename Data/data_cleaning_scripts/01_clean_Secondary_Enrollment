@@ -1,0 +1,81 @@
+import pandas as pd
+from pathlib import Path
+
+DATA_DIR = Path(__file__).resolve().parents[1]   # .../Data
+RAW_DIR = DATA_DIR / "Raw"
+OUT_DIR = DATA_DIR / "Clean"
+OUT_DIR.mkdir(exist_ok=True)
+
+INFILE = RAW_DIR / "Secondary_School_Enrollment.csv"
+OUTFILE = OUT_DIR / "secondary_school_enrollment_clean_long.csv"
+
+def find_header_line_index(path: Path) -> int:
+    """
+    Find the exact line index (0-based) where the real header begins.
+    We require the line to START with the expected header prefix.
+    """
+    prefix = '"Country Name","Country Code","Indicator Name","Indicator Code"'
+    with path.open(encoding="utf-8-sig", errors="replace") as f:
+        for i, line in enumerate(f):
+            if line.lstrip().startswith(prefix):
+                return i
+    raise ValueError("Could not find a header line starting with Country Name, Country Code, Indicator Name, Indicator Code.")
+
+header_idx = find_header_line_index(INFILE)
+
+# Skip everything BEFORE the header line; use that header line as the header
+df = pd.read_csv(
+    INFILE,
+    skiprows=header_idx,
+    header=0,
+    encoding="utf-8-sig",
+    engine="python",
+)
+
+# Normalize colnames
+df.columns = (
+    df.columns.astype(str)
+    .str.replace("\ufeff", "", regex=False)
+    .str.strip()
+    .str.strip('"')
+)
+
+# Drop empty/unnamed columns
+df = df.loc[:, ~df.columns.str.contains(r"^Unnamed", case=False, regex=True)]
+df = df.dropna(axis=1, how="all")
+
+print("Header line index:", header_idx)
+print("First 10 columns:", df.columns.tolist()[:10])
+
+id_cols = ["Country Name", "Country Code", "Indicator Name", "Indicator Code"]
+missing = [c for c in id_cols if c not in df.columns]
+if missing:
+    raise ValueError(f"Expected ID columns missing: {missing}. Columns read were: {df.columns.tolist()[:12]} ...")
+
+year_cols = [c for c in df.columns if c.isdigit()]
+if not year_cols:
+    raise ValueError("No year columns found. (Expected '1960','1961',...). "
+                     f"Columns read start: {df.columns.tolist()[:12]}")
+
+long = df.melt(
+    id_vars=id_cols,
+    value_vars=year_cols,
+    var_name="year",
+    value_name="secondary_enrollment_gross_pct",
+)
+
+long["year"] = long["year"].astype("Int64")
+long["secondary_enrollment_gross_pct"] = pd.to_numeric(long["secondary_enrollment_gross_pct"], errors="coerce")
+long = long.dropna(subset=["secondary_enrollment_gross_pct"])
+
+# keep only secondary enrollment indicator
+long = long[long["Indicator Code"] == "SE.SEC.ENRR"].copy()
+
+long = long.sort_values(["Country Code", "year"]).reset_index(drop=True)
+
+print("Wide shape:", df.shape)
+print("Long shape:", long.shape)
+print(long.head())
+
+long.to_csv(OUTFILE, index=False)
+print("Saved:", OUTFILE)

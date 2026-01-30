@@ -1,0 +1,18 @@
+import pandas as pd
+
+panel = pd.read_csv("Data/Panel/panel_country_year_1990_2024.csv")
+bri = pd.read_csv("Data/Clean_BRI_entry/bri_membership.csv")
+
+# Clean up whitespace in column names
+panel.columns = panel.columns.str.strip()
+
+df = panel.merge(bri, on="Country Code", how="left")
+
+df["treated"] = df["join_year"].notna().astype(int)
+df["post_join"] = ((df["treated"] == 1) & (df["year"] >= df["join_year"])).astype(int)
+
+# Save the merged dataset
+df.to_csv("Data/Panel/panel_country_year_1990_2024_with_bri.csv", index=False)
+print("Merge complete! Saved to Data/Panel/panel_country_year_1990_2024_with_bri.csv")
+print(f"Total rows: {len(df)}")
+print(f"Countries with BRI membership: {df['treated'].sum()}")

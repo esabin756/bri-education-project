@@ -1,0 +1,50 @@
+import pandas as pd
+from pathlib import Path
+import csv
+
+DATA_DIR = Path(__file__).resolve().parents[1]   # .../Data
+RAW_DIR = DATA_DIR / "Raw"
+OUT_DIR = DATA_DIR / "Clean"
+OUT_DIR.mkdir(exist_ok=True)
+
+# If your file has .csv, keep it. If it has no extension, remove ".csv".
+INFILE = RAW_DIR / "Primary_School_enrollment.csv"
+OUTFILE = OUT_DIR / "primary_school_enrollment_clean_long.csv"
+
+def find_header_row(path: Path) -> int:
+    with path.open(newline="", encoding="utf-8") as f:
+        reader = csv.reader(f)
+        for i, row in enumerate(reader):
+            if len(row) >= 4 and row[:4] == ["Country Name", "Country Code", "Indicator Name", "Indicator Code"]:
+                return i
+    raise ValueError("Could not find the WDI header row.")
+
+header_idx = find_header_row(INFILE)
+
+df = pd.read_csv(INFILE, skiprows=header_idx)
+df = df.dropna(axis=1, how="all")
+
+id_cols = ["Country Name", "Country Code", "Indicator Name", "Indicator Code"]
+year_cols = [c for c in df.columns if c.isdigit()]
+
+long = df.melt(
+    id_vars=id_cols,
+    value_vars=year_cols,
+    var_name="year",
+    value_name="primary_enrollment_gross_pct",
+)
+
+long["year"] = long["year"].astype("Int64")
+long["primary_enrollment_gross_pct"] = pd.to_numeric(long["primary_enrollment_gross_pct"], errors="coerce")
+long = long.dropna(subset=["primary_enrollment_gross_pct"])
+
+# If you want to be strict and keep ONLY the primary enrollment indicator:
+long = long[long["Indicator Code"] == "SE.PRM.ENRR"].copy()
+
+long = long.sort_values(["Country Code", "year"]).reset_index(drop=True)
+
+print("Wide:", df.shape, " Long:", long.shape)
+print(long.head())
+
+long.to_csv(OUTFILE, index=False)
+print("Saved:", OUTFILE)
