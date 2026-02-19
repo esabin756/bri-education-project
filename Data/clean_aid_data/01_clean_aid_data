@@ -2,9 +2,8 @@ import pandas as pd
 from pathlib import Path
 import numpy as np
 
-# ---- adjust these paths to your repo structure ----
-DATA_DIR = Path(__file__).resolve().parents[1]  # .../Data
-RAW_DIR = DATA_DIR / "Raw_Aid_Data"
+DATA_DIR = Path(__file__).resolve().parents[1]
+RAW_DIR = DATA_DIR / "BRI_Data"
 CLEAN_DIR = DATA_DIR / "clean_aid_data"
 CLEAN_DIR.mkdir(exist_ok=True)
 
@@ -17,15 +16,13 @@ USECOLS = [
     "Recommended For Aggregates",
     "Recipient ISO-3",
     "Commitment Year",
-    "Status",
-    "Sector Name",
     "Adjusted Amount (Constant USD 2021)",
     "Amount Estimated",
 ]
 
 df = pd.read_excel(INFILE, sheet_name=SHEET, usecols=USECOLS)
 
-# Keep only records AidData recommends for aggregate analysis
+# Keep only records recommended for aggregates
 df = df[df["Recommended For Aggregates"].astype(str).str.strip().str.lower().eq("yes")].copy()
 
 # Standardize keys
@@ -33,26 +30,36 @@ df = df.rename(columns={"Recipient ISO-3": "Country Code", "Commitment Year": "y
 df["year"] = pd.to_numeric(df["year"], errors="coerce").astype("Int64")
 df = df.dropna(subset=["Country Code", "year"])
 
-# Amount to numeric
+# Amount numeric
 df["usd_const_2021"] = pd.to_numeric(df["Adjusted Amount (Constant USD 2021)"], errors="coerce")
 
-# Aggregate to country-year
+# Flags for coverage
+df["has_amount"] = df["usd_const_2021"].notna().astype(int)
+df["amount_estimated_flag"] = (df["Amount Estimated"].astype(str).str.strip().str.lower() == "yes").astype(int)
+
+# Aggregate to country-year (sum skips NaNs automatically)
 agg = (
     df.groupby(["Country Code", "year"], as_index=False)
       .agg(
-          projects=("AidData Record ID", "nunique"),
-          usd_const_2021=("usd_const_2021", "sum"),
-          share_amount_estimated=("Amount Estimated", lambda s: (s.astype(str).str.lower() == "yes").mean()),
+          projects_total=("AidData Record ID", "nunique"),
+          projects_with_amount=("has_amount", "sum"),
+          usd_const_2021_sum=("usd_const_2021", "sum"),
+          share_amount_estimated=("amount_estimated_flag", "mean"),
       )
 )
 
-# Fill missing USD sums as 0 (means: projects might exist with missing dollar estimates)
-agg["usd_const_2021"] = agg["usd_const_2021"].fillna(0)
+# Coverage ratio (how complete the money data is that year)
+agg["amount_coverage"] = agg["projects_with_amount"] / agg["projects_total"]
 
-# log transform for modeling
-agg["log1p_usd_const_2021"] = np.log1p(agg["usd_const_2021"])
+# If all amounts are missing in a country-year, pandas sum returns 0.0 by default.
+# That's fine as long as we ALSO carry amount_coverage to tell us it's incomplete.
+# (If you prefer, you can set usd_const_2021_sum to NaN when coverage==0.)
+agg.loc[agg["amount_coverage"] == 0, "usd_const_2021_sum"] = np.nan
 
-# Optional: restrict to your panel window now (1990–2024)
+# Log transform (use 0 when NaN for log, but keep the NaN sum separately)
+agg["log1p_usd_const_2021"] = np.log1p(agg["usd_const_2021_sum"].fillna(0))
+
+# Restrict window if you want
 agg = agg[(agg["year"] >= 1990) & (agg["year"] <= 2024)].copy()
 
 agg = agg.sort_values(["Country Code", "year"]).reset_index(drop=True)
