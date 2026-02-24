@@ -1,0 +1,37 @@
+import pandas as pd
+import numpy as np
+
+# ── Load AidData country-year aggregated file ──
+aid = pd.read_csv('Data/clean_aid_data/aiddata_gcdf_country_year.csv')
+
+THRESHOLD = 500_000_000  # $500M in constant 2021 USD
+
+# ── Build cumulative investment per country ──
+aid = aid.sort_values(['Country Code', 'year'])
+aid['cumulative_inv'] = aid.groupby('Country Code')['usd_const_2021_sum'].cumsum()
+
+# ── Find first year cumulative crosses threshold ──
+crossed = (
+    aid[aid['cumulative_inv'] >= THRESHOLD]
+    .groupby('Country Code')['year']
+    .min()
+    .reset_index()
+    .rename(columns={'year': 'treat_year'})
+)
+
+# ── Merge back and build treatment indicators ──
+aid = aid.merge(crossed, on='Country Code', how='left')
+
+aid['treat_500m'] = aid['treat_year'].notna().astype(int)
+aid['post_500m']  = ((aid['treat_year'].notna()) & (aid['year'] >= aid['treat_year'])).astype(int)
+aid['rel_time']   = aid['year'] - aid['treat_year']
+
+# ── Sanity check ──
+print("Ever-treated countries:", aid[aid['treat_500m']==1]['Country Code'].nunique())
+print("Never-treated countries:", aid[aid['treat_500m']==0]['Country Code'].nunique())
+print("\nTreat year distribution:")
+print(aid[aid['treat_500m']==1].groupby('Country Code')['treat_year'].first().value_counts().sort_index())
+
+# ── Save ──
+aid.to_csv('Data/clean_aid_data/aiddata_with_treatment.csv', index=False)
+print("\nSaved.")
