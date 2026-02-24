@@ -1,0 +1,14 @@
+import pandas as pd
+import numpy as np
+import statsmodels.formula.api as smf
+
+panel = pd.read_csv('Data/Panel/panel_500m_treated.csv')
+
+# ── Merge income groups ──
+income = pd.read_csv('Data/Clean_BRI_entry/bri_membership_with_region_income.csv')
+income = income[['Country Code', 'IncomeGroup', 'Region']]
+panel = panel.merge(income, on='Country Code', how='left')
+
+print("Income group coverage:")
+print(panel.drop_duplicates('Country Code')['IncomeGroup'].value_counts(dropna=False))
+
