@@ -1,0 +1,115 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from pathlib import Path
+
+# ---------- paths ----------
+INFILE = Path("panel_with_birthrate.csv")          # adjust if needed
+OUTDIR = Path("outputs")
+OUTDIR.mkdir(exist_ok=True)
+
+# ---------- your 10 countries ----------
+COUNTRIES = ["LAO","KHM","SDN","TZA","MOZ","BEN","BGD","TGO","ETH","AFG"]
+
+# ---------- load ----------
+df = pd.read_csv(INFILE)
+
+# quick sanity check columns
+needed = ["Country Code", "year", "treated", "post_join", "usd_const_2021", "birth_rate_crude_per_1000"]
+missing_cols = [c for c in needed if c not in df.columns]
+if missing_cols:
+    raise ValueError(f"Missing columns in panel: {missing_cols}")
+
+# ---------- subpanel ----------
+sub = df[df["Country Code"].isin(COUNTRIES)].copy()
+
+# (optional) keep only 2000-2021 (should already be)
+sub = sub[(sub["year"] >= 2000) & (sub["year"] <= 2021)].copy()
+
+# sort + save
+sub = sub.sort_values(["Country Code", "year"])
+subpanel_path = OUTDIR / "subpanel_10countries_2000_2021.csv"
+sub.to_csv(subpanel_path, index=False)
+print(f"Saved subpanel -> {subpanel_path}")
+print("Rows:", len(sub), "Countries:", sub["Country Code"].nunique(), "Years:", sub["year"].nunique())
+
+# ---------- summary stats ----------
+# AidData: define "has dollars" as >0
+sub["aid_usd_positive"] = (sub["usd_const_2021"] > 0).astype(int)
+
+# choose variables you care about (edit this list freely)
+vars_for_stats = [
+    "usd_const_2021",
+    "aid_usd_positive",
+    "birth_rate_crude_per_1000",
+    "log_gdp_pc_current_usd",
+    "political_stability",
+    "avg_schooling_years",
+    "primary_enroll_gross_pct",
+    "secondary_enroll_gross_pct",
+    "tertiary_enroll_gross_pct",
+    "percent_urban",
+    "population_total",
+    "projects",
+]
+
+# keep only columns that exist (so script doesn't crash if some are absent)
+vars_for_stats = [v for v in vars_for_stats if v in sub.columns]
+
+# overall summary
+print("\nOVERALL SUMMARY (10-country subpanel)")
+print(sub[vars_for_stats].describe(include="all").T)
+
+# missingness by variable
+missingness = (sub[vars_for_stats].isna().mean().sort_values(ascending=False) * 100).round(2)
+print("\nMISSINGNESS (% of rows) by variable")
+print(missingness)
+
+# summary by country (especially useful)
+by_country = sub.groupby("Country Code")[vars_for_stats].agg(
+    n_rows=("usd_const_2021", "size"),
+    aid_years_positive=("aid_usd_positive", "sum"),
+    aid_share_positive=("aid_usd_positive", "mean"),
+    aid_total_usd=("usd_const_2021", "sum"),
+)
+by_country["aid_share_positive"] = (by_country["aid_share_positive"] * 100).round(2)
+print("\nBY-COUNTRY AidData summary")
+print(by_country.sort_values(["aid_years_positive", "aid_total_usd"], ascending=False))
+
+# ---------- visuals ----------
+# 1) Total AidData dollars (sum) across your 10 countries by year
+aid_by_year = sub.groupby("year")["usd_const_2021"].sum()
+plt.figure()
+plt.plot(aid_by_year.index, aid_by_year.values)
+plt.title("Total AidData dollars (constant 2021 USD) across 10 countries")
+plt.xlabel("Year")
+plt.ylabel("USD (constant 2021)")
+plt.tight_layout()
+plt.savefig(OUTDIR / "aid_total_by_year_10countries.png", dpi=200)
+plt.close()
+
+# 2) % of country-years with positive aid dollars by year
+share_pos_by_year = sub.groupby("year")["aid_usd_positive"].mean() * 100
+plt.figure()
+plt.plot(share_pos_by_year.index, share_pos_by_year.values)
+plt.title("% of country-years with AidData dollars > 0 (10 countries)")
+plt.xlabel("Year")
+plt.ylabel("Percent")
+plt.tight_layout()
+plt.savefig(OUTDIR / "aid_share_positive_by_year_10countries.png", dpi=200)
+plt.close()
+
+# 3) Example outcome trend: birthrate averaged across the 10 countries
+birth_by_year = sub.groupby("year")["birth_rate_crude_per_1000"].mean()
+plt.figure()
+plt.plot(birth_by_year.index, birth_by_year.values)
+plt.title("Average crude birth rate across 10 countries")
+plt.xlabel("Year")
+plt.ylabel("Births per 1,000 people")
+plt.tight_layout()
+plt.savefig(OUTDIR / "birthrate_avg_by_year_10countries.png", dpi=200)
+plt.close()
+
+print("\nSaved plots to outputs/:")
+print("- aid_total_by_year_10countries.png")
+print("- aid_share_positive_by_year_10countries.png")
+print("- birthrate_avg_by_year_10countries.png")

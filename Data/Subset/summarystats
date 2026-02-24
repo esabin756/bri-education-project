@@ -1,0 +1,167 @@
+import pandas as pd, numpy as np
+import matplotlib.pyplot as plt
+from pathlib import Path
+# caas_jupyter_tools not available in this environment; we'll print summaries instead
+
+
+INFILE = Path("panel_with_birthrate.csv")  # relative to workspace root
+OUTDIR = Path("outputs_10country_summaries")
+OUTDIR.mkdir(parents=True, exist_ok=True)
+
+# Original 10 treated countries we coded for earlier
+COUNTRIES = ["LAO","KHM","SDN","TZA","MOZ","BEN","BGD","TGO","ETH","AFG"]
+
+df = pd.read_csv(INFILE)
+sub = df[df["Country Code"].isin(COUNTRIES)].copy()
+sub = sub[(sub["year"]>=2000) & (sub["year"]<=2021)].copy()
+
+# Requested variables
+vars_core = {
+    "primary_enroll_gross_pct": "primary_enroll_gross_pct",
+    "secondary_enroll_gross_pct": "secondary_enroll_gross_pct",
+    "birth_rate_crude_per_1000": "birth_rate_crude_per_1000",
+    "usd_const_2021": "usd_const_2021",
+    "projects": "projects",
+}
+present = [c for c in vars_core if c in sub.columns]
+
+# Helpers
+sub["aid_positive"] = (sub["usd_const_2021"] > 0).astype(int) if "usd_const_2021" in sub.columns else 0
+sub["usd_const_2021"] = pd.to_numeric(sub.get("usd_const_2021"), errors="coerce") if "usd_const_2021" in sub.columns else np.nan
+
+# --- Summary statistics overall (all country-years in these 10 countries) ---
+overall_stats = sub[present + ["aid_positive"]].describe().T
+overall_stats["missing_pct"] = (1 - (sub[present + ["aid_positive"]].count() / len(sub))) * 100
+overall_stats = overall_stats[["count","missing_pct","mean","std","min","25%","50%","75%","max"]]
+overall_stats = overall_stats.rename(columns={"count":"n_nonmissing"}).round(3)
+
+# --- By-country summary statistics ---
+agg = {
+    "primary_enroll_gross_pct":["count","mean","std","min","max"],
+    "secondary_enroll_gross_pct":["count","mean","std","min","max"],
+    "birth_rate_crude_per_1000":["count","mean","std","min","max"],
+    "usd_const_2021":["count","mean","sum","min","max"],
+    "aid_positive":["sum","mean"],
+    "projects":["count","mean","sum","min","max"],
+}
+# keep only keys that exist
+agg2 = {}
+for k,v in agg.items():
+    if k in sub.columns:
+        agg2[k]=v
+
+by_country = sub.groupby("Country Code").agg(agg2)
+by_country.columns = ["_".join(col).strip() for col in by_country.columns]
+by_country = by_country.reset_index()
+
+# add coverage metrics
+if "aid_positive_sum" in by_country.columns:
+    by_country["aid_years_with_usd"] = by_country["aid_positive_sum"].astype(int)
+    by_country["aid_share_years_with_usd_pct"] = (by_country["aid_positive_mean"]*100).round(2)
+if "usd_const_2021_sum" in by_country.columns:
+    by_country["aid_total_usd_const_2021"] = by_country["usd_const_2021_sum"]
+    by_country["aid_avg_usd_const_2021"] = by_country["usd_const_2021_mean"]
+
+# tidy columns order (best effort)
+preferred = ["Country Code",
+             "primary_enroll_gross_pct_count","primary_enroll_gross_pct_mean","primary_enroll_gross_pct_min","primary_enroll_gross_pct_max",
+             "secondary_enroll_gross_pct_count","secondary_enroll_gross_pct_mean","secondary_enroll_gross_pct_min","secondary_enroll_gross_pct_max",
+             "birth_rate_crude_per_1000_count","birth_rate_crude_per_1000_mean","birth_rate_crude_per_1000_min","birth_rate_crude_per_1000_max",
+             "aid_years_with_usd","aid_share_years_with_usd_pct","aid_total_usd_const_2021","aid_avg_usd_const_2021",
+             "projects_sum","projects_mean"]
+cols = [c for c in preferred if c in by_country.columns] + [c for c in by_country.columns if c not in preferred]
+by_country = by_country[cols]
+
+# --- Trends over time (mean across the 10 countries) ---
+trend_all = sub.groupby("year").agg({
+    "primary_enroll_gross_pct":"mean" if "primary_enroll_gross_pct" in sub.columns else "size",
+    "secondary_enroll_gross_pct":"mean" if "secondary_enroll_gross_pct" in sub.columns else "size",
+    "birth_rate_crude_per_1000":"mean" if "birth_rate_crude_per_1000" in sub.columns else "size",
+    "usd_const_2021":"sum" if "usd_const_2021" in sub.columns else "size",
+}).reset_index()
+
+# --- Country-specific trends (for plotting, keep as long) ---
+trend_country = sub.groupby(["Country Code","year"]).agg({
+    "primary_enroll_gross_pct":"mean" if "primary_enroll_gross_pct" in sub.columns else "size",
+    "secondary_enroll_gross_pct":"mean" if "secondary_enroll_gross_pct" in sub.columns else "size",
+    "birth_rate_crude_per_1000":"mean" if "birth_rate_crude_per_1000" in sub.columns else "size",
+    "usd_const_2021":"sum" if "usd_const_2021" in sub.columns else "size",
+}).reset_index()
+
+# --- Save tables ---
+overall_csv = OUTDIR / "summary_overall_10countries.csv"
+by_country_csv = OUTDIR / "summary_by_country_10countries.csv"
+trend_all_csv = OUTDIR / "trend_all_10countries_by_year.csv"
+trend_country_csv = OUTDIR / "trend_by_country_by_year_10countries.csv"
+
+overall_stats.to_csv(overall_csv)
+by_country.to_csv(by_country_csv, index=False)
+trend_all.to_csv(trend_all_csv, index=False)
+trend_country.to_csv(trend_country_csv, index=False)
+
+# --- Plots ---
+def save_line(df_line, ycol, title, ylabel, fname):
+    plt.figure()
+    plt.plot(df_line["year"], df_line[ycol])
+    plt.title(title)
+    plt.xlabel("Year")
+    plt.ylabel(ylabel)
+    plt.tight_layout()
+    plt.savefig(OUTDIR / fname, dpi=200)
+    plt.close()
+
+# mean trends across the 10 countries
+if "primary_enroll_gross_pct" in trend_all.columns:
+    save_line(trend_all, "primary_enroll_gross_pct",
+              "Primary enrollment (gross, %) — average across 10 countries",
+              "Percent", "primary_enroll_avg_10countries.png")
+if "secondary_enroll_gross_pct" in trend_all.columns:
+    save_line(trend_all, "secondary_enroll_gross_pct",
+              "Secondary enrollment (gross, %) — average across 10 countries",
+              "Percent", "secondary_enroll_avg_10countries.png")
+if "birth_rate_crude_per_1000" in trend_all.columns:
+    save_line(trend_all, "birth_rate_crude_per_1000",
+              "Crude birth rate (per 1,000) — average across 10 countries",
+              "Births per 1,000", "birthrate_avg_10countries.png")
+if "usd_const_2021" in trend_all.columns:
+    save_line(trend_all, "usd_const_2021",
+              "AidData dollars (constant 2021 USD) — total across 10 countries",
+              "USD (constant 2021)", "aid_total_usd_10countries.png")
+
+# country lines (one plot per metric, many lines)
+def save_country_lines(metric, title, ylabel, fname):
+    plt.figure()
+    for code, g in trend_country.groupby("Country Code"):
+        plt.plot(g["year"], g[metric], label=code)
+    plt.title(title)
+    plt.xlabel("Year")
+    plt.ylabel(ylabel)
+    plt.legend(ncol=5, fontsize=7)
+    plt.tight_layout()
+    plt.savefig(OUTDIR / fname, dpi=200)
+    plt.close()
+
+if "primary_enroll_gross_pct" in trend_country.columns:
+    save_country_lines("primary_enroll_gross_pct",
+                       "Primary enrollment (gross, %) — each country",
+                       "Percent", "primary_enroll_by_country.png")
+if "secondary_enroll_gross_pct" in trend_country.columns:
+    save_country_lines("secondary_enroll_gross_pct",
+                       "Secondary enrollment (gross, %) — each country",
+                       "Percent", "secondary_enroll_by_country.png")
+if "birth_rate_crude_per_1000" in trend_country.columns:
+    save_country_lines("birth_rate_crude_per_1000",
+                       "Crude birth rate (per 1,000) — each country",
+                       "Births per 1,000", "birthrate_by_country.png")
+if "usd_const_2021" in trend_country.columns:
+    save_country_lines("usd_const_2021",
+                       "AidData dollars (constant 2021 USD) — each country (total per year)",
+                       "USD (constant 2021)", "aid_usd_by_country.png")
+
+# Display key tables in UI (fallback to console prints)
+print("\nOverall summary stats (10 countries):")
+print(overall_stats)
+print("\nBy-country summary (10 countries):")
+print(by_country)
+
+OUTDIR, str(overall_csv), str(by_country_csv), str(trend_all_csv), str(trend_country_csv)
