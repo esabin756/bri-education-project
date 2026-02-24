@@ -1,0 +1,40 @@
+import pandas as pd
+from pathlib import Path
+
+# --- repo paths (assumes this script lives in Data/GIT_Data/clean_git/) ---
+BASE = Path(__file__).resolve().parents[2]  # -> Data/
+CLEAN_CGIT = BASE / "Data" / "GIT_Data" / "clean_git" / "cgit_clean_transactions.csv"
+ISO_MAP   = BASE / "Data" / "GIT_Data"  / "cgit_country_to_iso3.csv"
+
+OUTFILE   = BASE / "Data" / "GIT_Data" / "clean_git" / "cgit_clean_transactions_with_iso3.csv"
+
+# 1) Read files
+cgit = pd.read_csv(CLEAN_CGIT)
+iso  = pd.read_csv(ISO_MAP)  # columns: country, Country Code
+
+# 2) Standardize country strings (prevents whitespace/case issues)
+cgit["country_std"] = cgit["country"].astype(str).str.strip()
+iso["country_std"]  = iso["country"].astype(str).str.strip()
+
+# 3) Merge (keep all CGIT rows)
+merged = cgit.merge(
+    iso[["country_std", "Country Code"]],
+    on="country_std",
+    how="left"
+).rename(columns={"Country Code": "iso3"})
+
+cols = merged.columns.tolist()
+cols.insert(cols.index("country") + 1, cols.pop(cols.index("iso3")))
+merged = merged[cols]
+
+# 4) Quick QA: what didn't match?
+unmatched = merged.loc[merged["iso3"].isna(), "country"].value_counts()
+print(f"Rows: {len(merged):,}")
+print(f"Unmatched country labels: {len(unmatched):,}")
+if len(unmatched) > 0:
+    print(unmatched.head(25))
+
+# 5) Clean up and save
+merged = merged.drop(columns=["country_std"])
+merged.to_csv(OUTFILE, index=False)
+print("Wrote:", OUTFILE)

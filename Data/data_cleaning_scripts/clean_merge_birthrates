@@ -1,0 +1,57 @@
+import pandas as pd
+import re
+
+PANEL_PATH = "Data/Panel/panel_country_year_2000_2021_with_bri_and_aiddata.csv"
+BIRTH_PATH = "Data/Raw_WBD/birthrate.csv"
+
+def clean_wdi_birthrate(df, years_keep=range(2000, 2022)):
+    """
+    Cleans a World Bank/WDI wide export for crude birth rate:
+    - drops footer rows
+    - filters to birth rate series code SP.DYN.CBRT.IN
+    - melts year columns '2000 [YR2000]' -> long
+    - converts values to numeric
+    """
+    d = df.copy()
+
+    # Drop footer rows (keep only rows with ISO3 country codes)
+    d = d[d["Country Code"].astype(str).str.fullmatch(r"[A-Z]{3}", na=False)]
+
+    # Keep only crude birth rate series
+    d = d[d["Series Code"] == "SP.DYN.CBRT.IN"]
+
+    # Identify year columns like "2000 [YR2000]"
+    year_cols = [c for c in d.columns if re.fullmatch(r"\d{4} \[YR\d{4}\]", str(c))]
+
+    # Wide -> long
+    long = d.melt(
+        id_vars=["Country Code"],
+        value_vars=year_cols,
+        var_name="year_raw",
+        value_name="birth_rate_crude_per_1000"
+    )
+
+    long["year"] = long["year_raw"].str.slice(0, 4).astype(int)
+    long = long[long["year"].isin(list(years_keep))]
+
+    # Convert ".." etc to NaN, and strings -> numbers
+    long["birth_rate_crude_per_1000"] = pd.to_numeric(long["birth_rate_crude_per_1000"], errors="coerce")
+
+    return long[["Country Code", "year", "birth_rate_crude_per_1000"]]
+
+
+# ---- Clean birthrate ----
+birth = pd.read_csv(BIRTH_PATH)
+birth_long = clean_wdi_birthrate(birth)
+
+# Save cleaned birthrate long file
+birth_long.to_csv("birthrate_clean_long_2000_2021.csv", index=False)
+
+# ---- Merge into panel ----
+panel = pd.read_csv(PANEL_PATH)
+panel_birth = panel.merge(birth_long, on=["Country Code", "year"], how="left")
+
+panel_birth.to_csv("Data/Panel/panel_with_birthrate.csv", index=False)
+
+print("Saved: birthrate_clean_long_2000_2021.csv")
+print("Saved: panel_with_birthrate.csv")
