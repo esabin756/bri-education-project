@@ -1,0 +1,33 @@
+import pandas as pd
+import numpy as np
+import statsmodels.formula.api as smf
+panel = pd.read_csv('Data/Panel/panel_500m_treated.csv')
+
+# ── Merge income groups ──
+income = pd.read_csv('Data/Clean_BRI_entry/bri_membership_with_region_income.csv')
+income = income[['Country Code', 'IncomeGroup', 'Region']]
+panel = panel.merge(income, on='Country Code', how='left')
+
+print("Income group coverage:")
+print(panel.drop_duplicates('Country Code')['IncomeGroup'].value_counts(dropna=False))
+bri_income = pd.read_csv('Data/Clean_BRI_entry/bri_membership_with_region_income.csv')
+bri_income = bri_income[['Country Code', 'IncomeGroup', 'Region']]
+
+# Source 2: AidData OECD classification (BRI recipients only)
+aid_income = pd.read_excel('Data/BRI_Data/AidDatasGlobalChineseDevelopmentFinanceDataset_v3.0.xlsx',
+                            sheet_name='GCDF_3.0',
+                            usecols=['Recipient ISO-3', 'OECD ODA Income Group'])
+aid_income = (aid_income
+              .drop_duplicates('Recipient ISO-3')
+              .rename(columns={'Recipient ISO-3': 'Country Code',
+                               'OECD ODA Income Group': 'IncomeGroup_aid'}))
+
+# ── Merge into panel ──
+panel = panel.merge(bri_income, on='Country Code', how='left')
+panel = panel.merge(aid_income, on='Country Code', how='left')
+
+# Use bri_income as primary, fill gaps with AidData
+panel['IncomeGroup'] = panel['IncomeGroup'].fillna(panel['IncomeGroup_aid'])
+
+print("Income group coverage after merge:")
+print(panel.drop_duplicates('Country Code')['IncomeGroup'].value_counts(dropna=False))

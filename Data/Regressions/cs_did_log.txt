@@ -1,0 +1,61 @@
+============================================================
+  CALLAWAY-SANTANNA / SUN-ABRAHAM DiD
+  Heterogeneity-robust staggered treatment estimator
+============================================================
+
+============================================================
+  Full Panel — Primary Enrollment (%)
+  N countries=247, N obs=4642
+============================================================
+  ERROR: Unable to evaluate factor `sunab(g, year)`. [NameError: name 'sunab' is not defined]
+
+============================================================
+  Full Panel — Secondary Enrollment (%)
+  N countries=245, N obs=4178
+============================================================
+  ERROR: Unable to evaluate factor `sunab(g, year)`. [NameError: name 'sunab' is not defined]
+
+============================================================
+  Full Panel — Tertiary Enrollment (%)
+  N countries=237, N obs=3821
+============================================================
+  ERROR: Unable to evaluate factor `sunab(g, year)`. [NameError: name 'sunab' is not defined]
+
+============================================================
+  Low & Middle Income — Primary Enrollment (%)
+  N countries=126, N obs=2257
+============================================================
+  ERROR: Unable to evaluate factor `sunab(g, year)`. [NameError: name 'sunab' is not defined]
+
+============================================================
+  Low & Middle Income — Secondary Enrollment (%)
+  N countries=124, N obs=1854
+============================================================
+  ERROR: Unable to evaluate factor `sunab(g, year)`. [NameError: name 'sunab' is not defined]
+
+============================================================
+  Low & Middle Income — Tertiary Enrollment (%)
+  N countries=118, N obs=1660
+============================================================
+  ERROR: Unable to evaluate factor `sunab(g, year)`. [NameError: name 'sunab' is not defined]
+
+============================================================
+  Sub-Saharan Africa — Primary Enrollment (%)
+  N countries=48, N obs=814
+============================================================
+  ERROR: Unable to evaluate factor `sunab(g, year)`. [NameError: name 'sunab' is not defined]
+
+============================================================
+  Sub-Saharan Africa — Secondary Enrollment (%)
+  N countries=47, N obs=609
+============================================================
+  ERROR: Unable to evaluate factor `sunab(g, year)`. [NameError: name 'sunab' is not defined]
+
+============================================================
+  Sub-Saharan Africa — Tertiary Enrollment (%)
+  N countries=46, N obs=553
+============================================================
+  ERROR: Unable to evaluate factor `sunab(g, year)`. [NameError: name 'sunab' is not defined]
+
+
+Done.

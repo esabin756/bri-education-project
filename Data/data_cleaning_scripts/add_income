@@ -1,0 +1,17 @@
+import pandas as pd
+
+panel = pd.read_csv('Data/Panel/panel_500m_treated.csv')
+
+# ── World Bank income classifications (CLASS file) ──
+wb = pd.read_excel('Data/Raw_WBD/CLASS_2025_10_07.xlsx')
+wb = wb[['Code', 'Income group', 'Region']].rename(
+    columns={'Code': 'Country Code', 'Income group': 'IncomeGroup'}
+)
+
+panel = panel.merge(wb, on='Country Code', how='left')
+
+print("Income group coverage:")
+print(panel.drop_duplicates('Country Code')['IncomeGroup'].value_counts(dropna=False))
+
+panel.to_csv('Data/Panel/panel_with_income.csv', index=False)
+print("\nSaved.")

@@ -1,0 +1,215 @@
+
+
+===========================================================================
+  1. SAMPLE DESCRIPTION
+===========================================================================
+
+  Countries by income group:
+  Income Group                    N Countries    N Obs  % of Sample
+  -----------------------------------------------------------------
+  High income                              86     1892        32.5%
+  Low income                               25      550         9.4%
+  Lower middle income                      50     1100        18.9%
+  Upper middle income                      54     1188        20.4%
+  nan                                      50     1100        18.9%
+  TOTAL                                   265     5830       100.0%
+
+  Countries by region:
+  Region                                         N Countries    N Obs
+  --------------------------------------------------------------------
+  East Asia & Pacific                                     37      814
+  Europe & Central Asia                                   58     1276
+  Latin America & Caribbean                               42      924
+  Middle East, North Africa, Afghanistan & Pakistan           23      506
+  North America                                            3       66
+  South Asia                                               6      132
+  Sub-Saharan Africa                                      48     1056
+  nan                                                     48     1056
+
+  Treatment status by income group ($500M threshold):
+  Income Group                      Treated  Never-Treated  % Treated
+  --------------------------------------------------------------------
+  Low income                             14             11      56.0%
+  Lower middle income                    25             25      50.0%
+  Upper middle income                    19             35      35.2%
+  High income                             4             82       4.7%
+
+  Panel year coverage:
+  Mean years per country:   22.0
+  Countries with full 22yr: 265
+
+
+===========================================================================
+  2. OUTCOME VARIABLES — BY INCOME GROUP
+===========================================================================
+
+  Primary Enrollment (%)
+  Group                             Mean      SD     Min     Max      N  Missing%
+  -------------------------------------------------------------------------
+  Full Panel                       101.4    12.8    21.5   184.0   4687     19.6%
+  Low income                        96.4    28.3    21.5   157.7    392     28.7%
+  Lower middle income              101.0    15.4    25.6   184.0    889     19.2%
+  Upper middle income              104.3     8.8    47.5   135.7    985     17.1%
+  High income                      102.6     7.3    78.6   175.8   1373     27.4%
+  Sub-Saharan Africa                98.4    22.5    22.8   157.7    820     22.3%
+
+  Secondary Enrollment (%)
+  Group                             Mean      SD     Min     Max      N  Missing%
+  -------------------------------------------------------------------------
+  Full Panel                        79.0    28.3     5.9   164.1   4222     27.6%
+  Low income                        33.4    15.9     5.9   107.0    303     44.9%
+  Lower middle income               60.4    21.9    13.4    97.3    691     37.2%
+  Upper middle income               86.3    15.5    17.8   124.3    868     26.9%
+  High income                      102.6    16.5    36.4   164.1   1316     30.4%
+  Sub-Saharan Africa                44.9    24.1     5.9   112.3    615     41.8%
+
+  Tertiary Enrollment (%)
+  Group                             Mean      SD     Min     Max      N  Missing%
+  -------------------------------------------------------------------------
+  Full Panel                        36.8    27.2     0.1   150.6   3844     34.1%
+  Low income                         6.3     7.2     0.3    47.8    267     51.5%
+  Lower middle income               17.2    12.8     0.3    56.9    647     41.2%
+  Upper middle income               40.5    22.4     0.2   125.8    754     36.5%
+  High income                       58.6    24.3     0.1   150.6   1153     39.1%
+  Sub-Saharan Africa                 8.5     8.1     0.3    44.0    556     47.3%
+
+  Enrollment trends over time (full panel means):
+    Year    Primary   Secondary   Tertiary
+  ------------------------------------------
+    2000       98.0        68.0       23.8
+    2001       98.9        67.3       25.0
+    2002       99.8        69.9       26.0
+    2003      100.4        72.7       27.0
+    2004      101.4        71.7       28.2
+    2005      101.6        73.2       29.5
+    2006      101.6        74.0       30.6
+    2007      102.1        75.3       33.2
+    2008      102.5        76.8       33.7
+    2009      103.1        78.1       34.6
+    2010      103.1        79.4       35.1
+    2011      102.7        78.9       36.2
+    2012      102.5        80.3       37.2
+    2013      102.7        82.6       39.6
+    2014      102.3        83.7       40.9
+    2015      101.3        84.1       41.9
+    2016      102.3        85.3       45.1
+    2017      101.6        85.6       45.4
+    2018      100.9        87.0       46.1
+    2019      101.0        87.8       46.7
+    2020      100.7        88.4       48.0
+    2021      100.3        87.4       51.4
+
+
+===========================================================================
+  3. PRE vs POST TREATMENT MEANS — TREATED COUNTRIES ONLY
+===========================================================================
+
+  All Treated (N=107)
+  Variable                                 Pre     Post     Diff     
+  ----------------------------------------------------------
+  Primary Enrollment (%)                101.49   100.30    -1.20     
+  Secondary Enrollment (%)               61.10    72.77   +11.67  ***
+  Tertiary Enrollment (%)                19.99    32.69   +12.70  ***
+  Log GDP per Capita                      7.25     7.91    +0.66  ***
+  Urbanization Rate (%)                  44.15    51.45    +7.30  ***
+  Birth Rate (per 1,000)                 28.78    25.30    -3.48  ***
+  Population (millions)                  21.79    53.74   +31.96  ***
+
+  Low & Middle Income Treated (N=92)
+  Variable                                 Pre     Post     Diff     
+  ----------------------------------------------------------
+  Primary Enrollment (%)                101.37   100.47    -0.90     
+  Secondary Enrollment (%)               56.59    70.20   +13.61  ***
+  Tertiary Enrollment (%)                18.13    29.69   +11.56  ***
+  Log GDP per Capita                      7.01     7.75    +0.74  ***
+  Urbanization Rate (%)                  42.83    49.44    +6.62  ***
+  Birth Rate (per 1,000)                 30.45    26.34    -4.11  ***
+  Population (millions)                  23.47    55.80   +32.33  ***
+
+  SSA Treated (N=39)
+  Variable                                 Pre     Post     Diff     
+  ----------------------------------------------------------
+  Primary Enrollment (%)                 98.57    98.56    -0.01     
+  Secondary Enrollment (%)               36.11    47.56   +11.45  ***
+  Tertiary Enrollment (%)                 4.90    11.33    +6.43  ***
+  Log GDP per Capita                      6.49     7.31    +0.81  ***
+  Urbanization Rate (%)                  33.56    42.46    +8.90  ***
+  Birth Rate (per 1,000)                 38.68    35.49    -3.19  ***
+  Population (millions)                  13.13    29.87   +16.74  ***
+
+
+===========================================================================
+  4. TREATMENT VARIABLE SUMMARY
+===========================================================================
+
+  Ever-treated countries:  107
+  Never-treated countries: 236
+
+  Treatment entry year distribution:
+  Year      N Countries
+  ----------------------
+  2000                3
+  2001                4
+  2002                2
+  2003                5
+  2004                3
+  2005                5
+  2006                5
+  2007               11
+  2008                7
+  2009               11
+  2010                9
+  2011                4
+  2012               12
+  2013                8
+  2014                1
+  2015                3
+  2016                1
+  2017                4
+  2018                3
+  2019                4
+  2020                1
+  2021                1
+
+  Post-treatment observations by income group:
+  Income Group                     Post-treat    Pre-treat
+  ---------------------------------------------------------
+  Low income                              231          192
+  Lower middle income                     505          261
+  Upper middle income                     417          208
+  High income                             112           91
+
+
+===========================================================================
+  5. BALANCE CHECK — TREATED vs NEVER-TREATED (PRE-TREATMENT MEANS)
+===========================================================================
+
+  Variable                               Treated    Control     Diff   p-value     
+  ---------------------------------------------------------------------------
+  Primary Enrollment (%)                  101.49     101.78    -0.29     0.585     
+  Secondary Enrollment (%)                 61.10      84.26   -23.16     0.000  ***
+  Tertiary Enrollment (%)                  19.99      41.49   -21.50     0.000  ***
+  Log GDP per Capita                        7.25       9.00    -1.75     0.000  ***
+  Urbanization Rate (%)                    44.15      62.53   -18.38     0.000  ***
+  Birth Rate (per 1,000)                   28.78      19.11    +9.66     0.000  ***
+  Population (millions)                    21.79     414.91  -393.12     0.000  ***
+
+  N treated (pre-treatment): 759
+  N never-treated:           3,772
+
+  Note: Level differences absorbed by country FE. Parallel pre-trends validate DiD.
+
+
+===========================================================================
+  6. CONTROL VARIABLES SUMMARY
+===========================================================================
+
+  Variable                           Mean       SD      Min      Max  Missing%
+  -------------------------------------------------------------------------
+  Log GDP per Capita                 8.52     1.54     4.71    12.32      2.5%
+  Urbanization Rate (%)             57.67    23.06     8.04   100.00      0.0%
+  Birth Rate (per 1,000)            21.75    10.83     5.00    53.39      0.0%
+  Population (millions)            283.25   885.26     0.01  7920.51      0.0%
+
+Saved: Data/Regressions/bri_summary_stats.xlsx
+Saved: Data/Regressions/summary_stats_log.txt
