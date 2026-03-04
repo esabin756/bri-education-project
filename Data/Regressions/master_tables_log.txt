@@ -1,0 +1,39 @@
+Building master results table...
+  Full Panel                Primary Enrollment (%)              +1.115
+  Low & Middle Income       Primary Enrollment (%)              +0.969
+  Sub-Saharan Africa        Primary Enrollment (%)              -1.188
+  Full Panel                Secondary Enrollment (%)            +0.064
+  Low & Middle Income       Secondary Enrollment (%)            -0.358
+  Sub-Saharan Africa        Secondary Enrollment (%)            -3.248*
+  Full Panel                Tertiary Enrollment (%)             -0.284
+  Low & Middle Income       Tertiary Enrollment (%)             +0.086
+  Sub-Saharan Africa        Tertiary Enrollment (%)             -0.160
+  Full Panel                Youth Employment Ratio (%)          -0.177
+  Low & Middle Income       Youth Employment Ratio (%)          -0.046
+  Sub-Saharan Africa        Youth Employment Ratio (%)          -0.560
+  Full Panel                Female Employment Ratio (%)         -1.276**
+  Low & Middle Income       Female Employment Ratio (%)         -1.011*
+  Sub-Saharan Africa        Female Employment Ratio (%)         -1.150
+  Full Panel                Industry Employment (%)             +0.829**
+  Low & Middle Income       Industry Employment (%)             +0.175
+  Sub-Saharan Africa        Industry Employment (%)             -0.138
+  Full Panel                Unemployment Rate (%)               -0.131
+  Low & Middle Income       Unemployment Rate (%)               -0.136
+  Sub-Saharan Africa        Unemployment Rate (%)               +0.089
+  Full Panel                Youth Unemployment (%)              -0.394
+  Low & Middle Income       Youth Unemployment (%)              -0.465
+  Sub-Saharan Africa        Youth Unemployment (%)              -0.083
+  Full Panel                GNI per Capita (USD)                -3336.704***
+  Low & Middle Income       GNI per Capita (USD)                +8.587
+  Sub-Saharan Africa        GNI per Capita (USD)                +46.385
+  Full Panel                GDP Growth (%)                      +0.091
+  Low & Middle Income       GDP Growth (%)                      +0.274
+  Sub-Saharan Africa        GDP Growth (%)                      +0.996
+
+Building event study figures...
+  Saved: Data/Figures/event_study_main.png
+  Saved: Data/Figures/ssa_sector_secondary.png
+
+Saved: Data/Regressions/master_results.xlsx
+Saved: Data/Figures/event_study_main.png
+Saved: Data/Figures/ssa_sector_secondary.png
