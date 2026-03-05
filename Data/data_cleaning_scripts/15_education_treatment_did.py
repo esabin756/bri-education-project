@@ -76,18 +76,18 @@ def run_dynamic_edu(df, outcome):
     for l in range(7):
         df[f'lag{l}'] = ((df['treat_edu_t']==1) &
                           (df['rel_time_edu_t']==l)).astype(float)
-    for p in [1,2]:
+    for p in [1,2,3,4]:
         df[f'pre{p}'] = ((df['treat_edu_t']==1) &
                           (df['rel_time_edu_t']==-p)).astype(float)
 
-    lag_terms = ' + '.join([f'lag{l}' for l in range(7)] + ['pre1','pre2'])
+    lag_terms = ' + '.join([f'lag{l}' for l in range(7)] + ['pre1','pre2','pre3','pre4'])
     mod = smf.ols(
         f'{outcome} ~ {lag_terms} + {controls} + C(year) + C(Q("Country Code"))',
         data=df
     ).fit(cov_type='cluster', cov_kwds={'groups': df['Country Code']})
 
     results = []
-    for pp, col in [(-2,'pre2'),(-1,'pre1'),(0,'lag0'),(1,'lag1'),
+    for pp, col in [(-4,'pre4'),(-3,'pre3'),(-2,'pre2'),(-1,'pre1'),(0,'lag0'),(1,'lag1'),
                     (2,'lag2'),(3,'lag3'),(4,'lag4'),(5,'lag5'),(6,'lag6')]:
         results.append({
             'period': pp, 'coef': mod.params[col],
