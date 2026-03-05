@@ -1,0 +1,402 @@
+=================================================================
+  MAIN DiD REGRESSIONS — EXTENDED PANEL 2000-2023
+  N countries=251, Years=2000-2023
+  Treated=144, Never-treated=107
+=================================================================
+
+
+#################################################################
+  PART 1: BASIC DiD — Post x Treated
+#################################################################
+
+=================================================================
+  Primary Enrollment Gross (%)
+  Subset                        Coef       SE       t       p       N     
+  --------------------------------------------------------------
+  Full Panel                  +0.552    0.995    0.55   0.579    4642     
+  Low & Middle Income         +1.615    1.553    1.04   0.298    2257     
+  Sub-Saharan Africa          -0.425    2.853   -0.15   0.882     814     
+
+=================================================================
+  Secondary Enrollment Gross (%)
+  Subset                        Coef       SE       t       p       N     
+  --------------------------------------------------------------
+  Full Panel                  -0.700    0.936   -0.75   0.454    4178     
+  Low & Middle Income         -0.279    1.395   -0.20   0.841    1854     
+  Sub-Saharan Africa          -3.223    1.667   -1.93   0.053     609    *
+
+=================================================================
+  Tertiary Enrollment Gross (%)
+  Subset                        Coef       SE       t       p       N     
+  --------------------------------------------------------------
+  Full Panel                  +0.795    1.199    0.66   0.507    3821     
+  Low & Middle Income         +0.002    1.399    0.00   0.999    1660     
+  Sub-Saharan Africa          -0.320    1.307   -0.25   0.806     553     
+
+=================================================================
+  Secondary Enrollment Net (%)
+  Subset                        Coef       SE       t       p       N     
+  --------------------------------------------------------------
+  Full Panel                  -0.481    0.846   -0.57   0.570    2676     
+  Low & Middle Income         -0.398    1.385   -0.29   0.774    1020     
+  Sub-Saharan Africa          +0.030    1.209    0.02   0.980     318     
+
+=================================================================
+  Secondary Net — Female (%)
+  Subset                        Coef       SE       t       p       N     
+  --------------------------------------------------------------
+  Full Panel                  -0.318    0.883   -0.36   0.719    2641     
+  Low & Middle Income         -0.140    1.432   -0.10   0.922    1004     
+  Sub-Saharan Africa          -0.402    1.385   -0.29   0.771     316     
+
+=================================================================
+  Secondary Net — Male (%)
+  Subset                        Coef       SE       t       p       N     
+  --------------------------------------------------------------
+  Full Panel                  -0.714    0.888   -0.80   0.421    2641     
+  Low & Middle Income         -0.697    1.403   -0.50   0.619    1004     
+  Sub-Saharan Africa          +0.396    1.154    0.34   0.731     316     
+
+=================================================================
+  Secondary Gender Gap (F-M, pp)
+  Subset                        Coef       SE       t       p       N     
+  --------------------------------------------------------------
+  Full Panel                  +0.396    0.327    1.21   0.227    2641     
+  Low & Middle Income         +0.557    0.567    0.98   0.326    1004     
+  Sub-Saharan Africa          -0.798    0.785   -1.02   0.309     316     
+
+=================================================================
+  Tertiary Gross — Female (%)
+  Subset                        Coef       SE       t       p       N     
+  --------------------------------------------------------------
+  Full Panel                  +0.957    1.421    0.67   0.501    3718     
+  Low & Middle Income         +0.046    1.685    0.03   0.978    1588     
+  Sub-Saharan Africa          -0.891    1.830   -0.49   0.626     513     
+
+=================================================================
+  Tertiary Gross — Male (%)
+  Subset                        Coef       SE       t       p       N     
+  --------------------------------------------------------------
+  Full Panel                  +1.112    1.129    0.99   0.324    3718     
+  Low & Middle Income         +0.183    1.374    0.13   0.894    1588     
+  Sub-Saharan Africa          -0.474    0.941   -0.50   0.615     513     
+
+=================================================================
+  Female Employment Ratio (%)
+  Subset                        Coef       SE       t       p       N     
+  --------------------------------------------------------------
+  Full Panel                  -0.233    0.425   -0.55   0.583    4509     
+  Low & Middle Income         -0.461    0.612   -0.75   0.451    2281     
+  Sub-Saharan Africa          -0.369    1.086   -0.34   0.734     835     
+
+=================================================================
+  Youth Employment Ratio (%)
+  Subset                        Coef       SE       t       p       N     
+  --------------------------------------------------------------
+  Full Panel                  +0.128    0.533    0.24   0.810    4509     
+  Low & Middle Income         +0.850    0.742    1.15   0.252    2281     
+  Sub-Saharan Africa          +0.493    1.200    0.41   0.681     835     
+
+=================================================================
+  Unemployment Rate (%)
+  Subset                        Coef       SE       t       p       N     
+  --------------------------------------------------------------
+  Full Panel                  +0.065    0.316    0.20   0.838    4509     
+  Low & Middle Income         -0.469    0.389   -1.20   0.228    2281     
+  Sub-Saharan Africa          -0.019    0.304   -0.06   0.950     835     
+
+=================================================================
+  Industry Employment (%)
+  Subset                        Coef       SE       t       p       N     
+  --------------------------------------------------------------
+  Full Panel                  +0.068    0.349    0.20   0.845    4509     
+  Low & Middle Income         -0.066    0.422   -0.16   0.875    2281     
+  Sub-Saharan Africa          -0.773    0.796   -0.97   0.332     835     
+
+=================================================================
+  GDP Growth (%)
+  Subset                        Coef       SE       t       p       N     
+  --------------------------------------------------------------
+  Full Panel                  +0.257    0.348    0.74   0.460    4782     
+  Low & Middle Income         -0.009    0.467   -0.02   0.985    2367     
+  Sub-Saharan Africa          +1.049    0.730    1.44   0.151     857     
+
+=================================================================
+  GNI per Capita (USD)
+  Subset                        Coef       SE       t       p       N     
+  --------------------------------------------------------------
+  Full Panel                +372.911  656.736    0.57   0.570    4706     
+  Low & Middle Income        -59.625  176.901   -0.34   0.736    2357     
+  Sub-Saharan Africa          -9.657  284.968   -0.03   0.973     849     
+
+
+#################################################################
+  PART 2: DYNAMIC DiD — KEY OUTCOMES
+#################################################################
+
+  Secondary Enrollment Gross — Full Panel
+  Period         Coef       SE       p     
+  --------------------------------------
+  Pre(2)       -1.051    0.653   0.108     
+  Pre(1)       -1.124    0.719   0.118     
+  Lag(0)       -0.713    0.751   0.342     
+  Lag(1)       -0.729    0.780   0.350     
+  Lag(2)       -1.012    0.849   0.234     
+  Lag(3)       -0.811    0.907   0.371     
+  Lag(4)       -0.478    0.759   0.529     
+  Lag(5)       -0.804    0.761   0.290     
+  Lag(6)       -0.726    0.796   0.362     
+
+  Secondary Enrollment Gross — Sub-Saharan Africa
+  Period         Coef       SE       p     
+  --------------------------------------
+  Pre(2)       -0.502    1.235   0.684     
+  Pre(1)       -1.057    1.141   0.354     
+  Lag(0)       -0.513    1.362   0.707     
+  Lag(1)       -0.061    1.588   0.970     
+  Lag(2)       -0.486    1.523   0.750     
+  Lag(3)       -0.334    1.698   0.844     
+  Lag(4)       -1.402    1.683   0.405     
+  Lag(5)       -1.507    1.588   0.343     
+  Lag(6)       -1.224    1.840   0.506     
+
+  Secondary Enrollment Net — Sub-Saharan Africa
+  Period         Coef       SE       p     
+  --------------------------------------
+  Pre(2)       -0.770    1.397   0.582     
+  Pre(1)       -0.121    1.148   0.916     
+  Lag(0)       +0.904    1.270   0.476     
+  Lag(1)       -0.487    0.978   0.619     
+  Lag(2)       +0.231    1.767   0.896     
+  Lag(3)       -2.548    1.459   0.081    *
+  Lag(4)       -1.008    1.784   0.572     
+  Lag(5)       -1.077    1.811   0.552     
+  Lag(6)       -0.919    1.637   0.575     
+
+  Secondary Net Female — Sub-Saharan Africa
+  Period         Coef       SE       p     
+  --------------------------------------
+  Pre(2)       -1.019    1.292   0.430     
+  Pre(1)       -0.687    1.204   0.568     
+  Lag(0)       +0.277    1.242   0.824     
+  Lag(1)       -1.082    0.979   0.269     
+  Lag(2)       +0.080    1.666   0.962     
+  Lag(3)       -2.866    1.578   0.069    *
+  Lag(4)       -1.503    1.976   0.447     
+  Lag(5)       -1.268    1.851   0.493     
+  Lag(6)       -1.393    1.723   0.419     
+
+  Secondary Net Male — Sub-Saharan Africa
+  Period         Coef       SE       p     
+  --------------------------------------
+  Pre(2)       -0.005    1.632   0.998     
+  Pre(1)       +0.551    1.211   0.649     
+  Lag(0)       +1.602    1.374   0.244     
+  Lag(1)       +0.148    1.094   0.893     
+  Lag(2)       +0.453    1.973   0.818     
+  Lag(3)       -2.137    1.473   0.147     
+  Lag(4)       -0.490    1.705   0.774     
+  Lag(5)       -0.807    1.877   0.667     
+  Lag(6)       -0.424    1.683   0.801     
+
+  Female Employment — Full Panel
+  Period         Coef       SE       p     
+  --------------------------------------
+  Pre(2)       -0.045    0.338   0.895     
+  Pre(1)       -0.133    0.336   0.692     
+  Lag(0)       -0.067    0.361   0.854     
+  Lag(1)       +0.027    0.360   0.939     
+  Lag(2)       -0.183    0.324   0.572     
+  Lag(3)       -0.322    0.316   0.308     
+  Lag(4)       -0.091    0.323   0.779     
+  Lag(5)       -0.014    0.295   0.961     
+  Lag(6)       +0.101    0.273   0.711     
+
+  GDP Growth — Sub-Saharan Africa
+  Period         Coef       SE       p     
+  --------------------------------------
+  Pre(2)       +0.921    0.704   0.191     
+  Pre(1)       +0.269    0.701   0.701     
+  Lag(0)       +1.321    0.926   0.154     
+  Lag(1)       +1.689    0.722   0.019   **
+  Lag(2)       +1.206    0.736   0.102     
+  Lag(3)       +0.084    1.098   0.939     
+  Lag(4)       +1.539    0.938   0.101     
+  Lag(5)       +1.928    0.774   0.013   **
+  Lag(6)       +2.410    0.868   0.005  ***
+
+
+#################################################################
+  PART 3: EDUCATION-SPECIFIC TREATMENT ($10M edu investment)
+  Treated: 79 countries
+#################################################################
+
+  Primary Enrollment Gross (%)
+  Subset                        Coef       SE       p       N     
+  ----------------------------------------------------------
+  Full Panel                  +2.033    1.520   0.181    4642     
+  Low & Middle Income         +1.433    1.717   0.404    2257     
+  Sub-Saharan Africa          +0.740    3.087   0.811     814     
+
+  Secondary Enrollment Gross (%)
+  Subset                        Coef       SE       p       N     
+  ----------------------------------------------------------
+  Full Panel                  -0.195    1.313   0.882    4178     
+  Low & Middle Income         -0.752    1.446   0.603    1854     
+  Sub-Saharan Africa          -3.130    1.537   0.042     609   **
+
+  Tertiary Enrollment Gross (%)
+  Subset                        Coef       SE       p       N     
+  ----------------------------------------------------------
+  Full Panel                  -4.176    1.451   0.004    3821  ***
+  Low & Middle Income         -3.416    1.966   0.082    1660    *
+  Sub-Saharan Africa          -1.537    0.986   0.119     553     
+
+  Secondary Enrollment Net (%)
+  Subset                        Coef       SE       p       N     
+  ----------------------------------------------------------
+  Full Panel                  +1.560    1.075   0.147    2676     
+  Low & Middle Income         +0.415    1.222   0.734    1020     
+  Sub-Saharan Africa          -1.093    1.575   0.488     318     
+
+  Secondary Net Female (%)
+  Subset                        Coef       SE       p       N     
+  ----------------------------------------------------------
+  Full Panel                  +1.623    1.212   0.181    2641     
+  Low & Middle Income         +0.396    1.343   0.768    1004     
+  Sub-Saharan Africa          -1.384    1.508   0.359     316     
+
+  Secondary Net Male (%)
+  Subset                        Coef       SE       p       N     
+  ----------------------------------------------------------
+  Full Panel                  +1.371    1.079   0.204    2641     
+  Low & Middle Income         +0.320    1.273   0.801    1004     
+  Sub-Saharan Africa          -0.828    1.679   0.622     316     
+
+
+#################################################################
+  PART 4: SECTOR DOSE-RESPONSE — CLG AIDDATA
+#################################################################
+
+  Secondary Enrollment Gross
+
+    Full Panel
+    Sector                        Coef       SE       p     
+    ----------------------------------------------------
+    Education Investment       +0.0158   0.0316   0.618     
+    Transport Investment       +0.0279   0.0245   0.256     
+    Energy Investment          +0.0439   0.0278   0.114     
+    Health Investment          -0.0837   0.0288   0.004  ***
+    Industry Investment        +0.0338   0.0249   0.174     
+
+    Sub-Saharan Africa
+    Sector                        Coef       SE       p     
+    ----------------------------------------------------
+    Education Investment       +0.0711   0.0496   0.151     
+    Transport Investment       +0.0867   0.0456   0.057    *
+    Energy Investment          +0.0776   0.0588   0.187     
+    Health Investment          -0.0624   0.0565   0.270     
+    Industry Investment        +0.0660   0.0445   0.138     
+
+  Secondary Enrollment Net
+
+    Full Panel
+    Sector                        Coef       SE       p     
+    ----------------------------------------------------
+    Education Investment       +0.0028   0.0301   0.925     
+    Transport Investment       +0.0148   0.0214   0.488     
+    Energy Investment          +0.0584   0.0273   0.032   **
+    Health Investment          +0.0156   0.0320   0.625     
+    Industry Investment        +0.0191   0.0260   0.463     
+
+    Sub-Saharan Africa
+    Sector                        Coef       SE       p     
+    ----------------------------------------------------
+    Education Investment       +0.0139   0.0449   0.757     
+    Transport Investment       +0.0327   0.0398   0.411     
+    Energy Investment          -0.0020   0.0375   0.958     
+    Health Investment          +0.0061   0.0511   0.905     
+    Industry Investment        +0.0371   0.0462   0.422     
+
+  Secondary Net Female
+
+    Full Panel
+    Sector                        Coef       SE       p     
+    ----------------------------------------------------
+    Education Investment       +0.0097   0.0316   0.759     
+    Transport Investment       +0.0207   0.0229   0.365     
+    Energy Investment          +0.0687   0.0272   0.012   **
+    Health Investment          +0.0264   0.0336   0.432     
+    Industry Investment        +0.0200   0.0261   0.444     
+
+    Sub-Saharan Africa
+    Sector                        Coef       SE       p     
+    ----------------------------------------------------
+    Education Investment       +0.0188   0.0462   0.683     
+    Transport Investment       +0.0112   0.0430   0.795     
+    Energy Investment          +0.0152   0.0377   0.687     
+    Health Investment          +0.0119   0.0551   0.828     
+    Industry Investment        +0.0428   0.0411   0.297     
+
+  Secondary Net Male
+
+    Full Panel
+    Sector                        Coef       SE       p     
+    ----------------------------------------------------
+    Education Investment       -0.0011   0.0304   0.972     
+    Transport Investment       +0.0059   0.0220   0.788     
+    Energy Investment          +0.0498   0.0295   0.092    *
+    Health Investment          -0.0010   0.0326   0.976     
+    Industry Investment        +0.0172   0.0275   0.532     
+
+    Sub-Saharan Africa
+    Sector                        Coef       SE       p     
+    ----------------------------------------------------
+    Education Investment       +0.0078   0.0465   0.867     
+    Transport Investment       +0.0487   0.0417   0.243     
+    Energy Investment          -0.0196   0.0419   0.640     
+    Health Investment          +0.0027   0.0503   0.957     
+    Industry Investment        +0.0296   0.0542   0.585     
+
+  Female Employment
+
+    Full Panel
+    Sector                        Coef       SE       p     
+    ----------------------------------------------------
+    Education Investment       -0.0071   0.0165   0.665     
+    Transport Investment       +0.0125   0.0103   0.228     
+    Energy Investment          +0.0280   0.0135   0.038   **
+    Health Investment          -0.0312   0.0163   0.056    *
+    Industry Investment        +0.0108   0.0132   0.416     
+
+    Sub-Saharan Africa
+    Sector                        Coef       SE       p     
+    ----------------------------------------------------
+    Education Investment       -0.0033   0.0238   0.891     
+    Transport Investment       +0.0065   0.0201   0.746     
+    Energy Investment          +0.0071   0.0252   0.778     
+    Health Investment          -0.0482   0.0279   0.084    *
+    Industry Investment        -0.0223   0.0191   0.242     
+
+  GDP Growth
+
+    Full Panel
+    Sector                        Coef       SE       p     
+    ----------------------------------------------------
+    Education Investment       +0.0216   0.0143   0.131     
+    Transport Investment       +0.0246   0.0106   0.021   **
+    Energy Investment          +0.0063   0.0145   0.662     
+    Health Investment          +0.0321   0.0151   0.034   **
+    Industry Investment        +0.0094   0.0139   0.498     
+
+    Sub-Saharan Africa
+    Sector                        Coef       SE       p     
+    ----------------------------------------------------
+    Education Investment       +0.0411   0.0264   0.119     
+    Transport Investment       +0.0420   0.0264   0.112     
+    Energy Investment          -0.0092   0.0406   0.821     
+    Health Investment          +0.0458   0.0282   0.104     
+    Industry Investment        +0.0496   0.0304   0.102     
+
+
+Done.
