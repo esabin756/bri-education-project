@@ -7,6 +7,8 @@ df = pd.read_excel('Data/BRI_Data/AidDatas_CLG_Global_Dataset_v1.0.xlsx',
 
 # ── Filter to recommended for aggregates only ──
 df = df[df['Recommended_for_Aggregates']=='Yes'].copy()
+df = df[df['ODA_Eligible_Recipient']=='Yes'].copy()
+print(f"Records after ODA filter: {len(df):,}")
 print(f"Records after filtering: {len(df):,}")
 
 # ── Use Adjusted_Amount_Constant_USD_2023 as main amount ──
