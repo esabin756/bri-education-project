@@ -1,0 +1,110 @@
+=================================================================
+  PLACEBO TEST
+  Randomly assign fake treatment years to never-treated
+  countries and re-run main DiD specification
+  N iterations: 500
+=================================================================
+
+
+#################################################################
+  PART 1: PLACEBO COEFFICIENT DISTRIBUTION (500 iterations)
+#################################################################
+
+  Secondary Enrollment Gross (%) — Full Panel
+  Valid iterations:     500
+  Mean placebo coef:    +0.049
+  Std placebo coef:     0.790
+  95th pctile |coef|:   1.472
+  % significant (p<.05): 5.4%
+  % positive coef:      53.4%
+
+  Secondary Enrollment Gross (%) — Sub-Saharan Africa
+  Valid iterations:     500
+  Mean placebo coef:    -0.095
+  Std placebo coef:     3.837
+  95th pctile |coef|:   7.342
+  % significant (p<.05): 11.4%
+  % positive coef:      50.8%
+
+  Tertiary Enrollment Gross (%) — Full Panel
+  Valid iterations:     500
+  Mean placebo coef:    -0.006
+  Std placebo coef:     1.056
+  95th pctile |coef|:   2.087
+  % significant (p<.05): 5.2%
+  % positive coef:      50.0%
+
+  Tertiary Enrollment Gross (%) — Sub-Saharan Africa
+  No valid iterations
+
+  GDP Growth (%) — Full Panel
+  Valid iterations:     500
+  Mean placebo coef:    -0.028
+  Std placebo coef:     0.319
+  95th pctile |coef|:   0.595
+  % significant (p<.05): 2.8%
+  % positive coef:      45.4%
+
+  GDP Growth (%) — Sub-Saharan Africa
+  Valid iterations:     500
+  Mean placebo coef:    +0.095
+  Std placebo coef:     1.330
+  95th pctile |coef|:   2.560
+  % significant (p<.05): 11.0%
+  % positive coef:      55.6%
+
+  Female Employment Ratio (%) — Full Panel
+  Valid iterations:     500
+  Mean placebo coef:    -0.006
+  Std placebo coef:     0.324
+  95th pctile |coef|:   0.642
+  % significant (p<.05): 5.8%
+  % positive coef:      47.2%
+
+  Female Employment Ratio (%) — Sub-Saharan Africa
+  Valid iterations:     500
+  Mean placebo coef:    +0.008
+  Std placebo coef:     1.563
+  95th pctile |coef|:   3.051
+  % significant (p<.05): 17.2%
+  % positive coef:      50.8%
+
+
+#################################################################
+  PART 2: ACTUAL ESTIMATES VS PLACEBO DISTRIBUTION
+#################################################################
+
+  Outcome                             Subset                      Actual       p  Placebo mean  Placebo SD  Rank pct
+  --------------------------------------------------------------------------------------------------------------
+  Secondary Enrollment Gross (%)      Full Panel                  +0.901   0.474        +0.049       0.790     87.6%
+  Secondary Enrollment Gross (%)      Sub-Saharan Africa          -3.223   0.053        -0.095       3.837     20.8%
+  Tertiary Enrollment Gross (%)       Full Panel                  -0.523   0.695        -0.006       1.056     29.6%
+  GDP Growth (%)                      Full Panel                  +0.021   0.961        -0.028       0.319     55.6%
+  GDP Growth (%)                      Sub-Saharan Africa          +1.049   0.151        +0.095       1.330     77.2%
+  Female Employment Ratio (%)         Full Panel                  -1.124   0.063        -0.006       0.324      0.0%
+  Female Employment Ratio (%)         Sub-Saharan Africa          -0.369   0.734        +0.008       1.563     40.2%
+
+
+#################################################################
+  PART 3: PLACEBO — EDUCATION-SPECIFIC TREATMENT ($50M)
+#################################################################
+
+  Secondary Enrollment Gross — Full Panel
+  Mean placebo coef:     +0.020
+  Std placebo coef:      0.693
+  % significant (p<.05): 3.6%
+
+  Secondary Enrollment Gross — Sub-Saharan Africa
+  Mean placebo coef:     +0.011
+  Std placebo coef:      4.742
+  % significant (p<.05): 21.4%
+
+  Tertiary Enrollment Gross — Full Panel
+  Mean placebo coef:     -0.018
+  Std placebo coef:      1.030
+  % significant (p<.05): 5.0%
+
+  Tertiary Enrollment Gross — Sub-Saharan Africa
+
+
+Done.
