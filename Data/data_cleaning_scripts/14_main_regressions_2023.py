@@ -54,6 +54,7 @@ outcomes = [
     ('tertiary_enroll_gross_pct',    'Tertiary Enrollment Gross (%)'),
     ('tertiary_gross_female_y',      'Tertiary Gross — Female (%)'),
     ('tertiary_gross_male_y',        'Tertiary Gross — Male (%)'),
+    ('tertiary_gender_gap_gross', 'Tertiary Gender Gap Gross (F-M, pp)'),
     # Human capital stock
     ('avg_years_schooling',          'Avg Years of Schooling (adults)'),
     # Employment
@@ -168,25 +169,39 @@ print("  PART 2: DYNAMIC DiD — KEY OUTCOMES")
 print("#"*65)
 
 key_outcomes = [
-    # Primary
-    ('primary_enroll_gross_pct',   'Primary Enrollment Gross',   full, 'Full Panel'),
-    ('primary_enroll_gross_pct',   'Primary Enrollment Gross',   ssa,  'Sub-Saharan Africa'),
-    ('primary_gross_female',       'Primary Gross Female',       full, 'Full Panel'),
-    ('primary_gross_female',       'Primary Gross Female',       ssa,  'Sub-Saharan Africa'),
-    ('primary_gross_male',         'Primary Gross Male',         full, 'Full Panel'),
-    ('primary_gross_male',         'Primary Gross Male',         ssa,  'Sub-Saharan Africa'),
-    # Secondary
-    ('secondary_enroll_gross_pct', 'Secondary Enrollment Gross', full, 'Full Panel'),
-    ('secondary_enroll_gross_pct', 'Secondary Enrollment Gross', ssa,  'Sub-Saharan Africa'),
-    ('secondary_gross_female',     'Secondary Gross Female',     ssa,  'Sub-Saharan Africa'),
-    ('secondary_gross_male',       'Secondary Gross Male',       ssa,  'Sub-Saharan Africa'),
-    ('secondary_gender_gap_gross', 'Secondary Gender Gap Gross', ssa,  'Sub-Saharan Africa'),
+    # Primary — full panel and SSA, total + female + male + gap
+    ('primary_enroll_gross_pct',     'Primary Enrollment Gross',   full, 'Full Panel'),
+    ('primary_enroll_gross_pct',     'Primary Enrollment Gross',   ssa,  'Sub-Saharan Africa'),
+    ('primary_gross_female',         'Primary Gross Female',       full, 'Full Panel'),
+    ('primary_gross_female',         'Primary Gross Female',       ssa,  'Sub-Saharan Africa'),
+    ('primary_gross_male',           'Primary Gross Male',         full, 'Full Panel'),
+    ('primary_gross_male',           'Primary Gross Male',         ssa,  'Sub-Saharan Africa'),
+    ('primary_gender_gap_gross',     'Primary Gender Gap Gross',   full, 'Full Panel'),
+    ('primary_gender_gap_gross',     'Primary Gender Gap Gross',   ssa,  'Sub-Saharan Africa'),
+    # Secondary — full panel and SSA, total + female + male + gap
+    ('secondary_enroll_gross_pct',   'Secondary Enrollment Gross', full, 'Full Panel'),
+    ('secondary_enroll_gross_pct',   'Secondary Enrollment Gross', ssa,  'Sub-Saharan Africa'),
+    ('secondary_gross_female',       'Secondary Gross Female',     full, 'Full Panel'),
+    ('secondary_gross_female',       'Secondary Gross Female',     ssa,  'Sub-Saharan Africa'),
+    ('secondary_gross_male',         'Secondary Gross Male',       full, 'Full Panel'),
+    ('secondary_gross_male',         'Secondary Gross Male',       ssa,  'Sub-Saharan Africa'),
+    ('secondary_gender_gap_gross',   'Secondary Gender Gap Gross', full, 'Full Panel'),
+    ('secondary_gender_gap_gross',   'Secondary Gender Gap Gross', ssa,  'Sub-Saharan Africa'),
+    # Tertiary — full panel and SSA, total + female + male + gap
+    ('tertiary_enroll_gross_pct',    'Tertiary Enrollment Gross',  full, 'Full Panel'),
+    ('tertiary_enroll_gross_pct',    'Tertiary Enrollment Gross',  ssa,  'Sub-Saharan Africa'),
+    ('tertiary_gross_female_y',      'Tertiary Gross Female',      full, 'Full Panel'),
+    ('tertiary_gross_female_y',      'Tertiary Gross Female',      ssa,  'Sub-Saharan Africa'),
+    ('tertiary_gross_male_y',        'Tertiary Gross Male',        full, 'Full Panel'),
+    ('tertiary_gross_male_y',        'Tertiary Gross Male',        ssa,  'Sub-Saharan Africa'),
+    ('tertiary_gender_gap_gross',    'Tertiary Gender Gap Gross',  full, 'Full Panel'),
+    ('tertiary_gender_gap_gross',    'Tertiary Gender Gap Gross',  ssa,  'Sub-Saharan Africa'),
     # Human capital stock
-    ('avg_years_schooling',        'Avg Years of Schooling',     full, 'Full Panel'),
-    ('avg_years_schooling',        'Avg Years of Schooling',     ssa,  'Sub-Saharan Africa'),
+    ('avg_years_schooling',          'Avg Years of Schooling',     full, 'Full Panel'),
+    ('avg_years_schooling',          'Avg Years of Schooling',     ssa,  'Sub-Saharan Africa'),
     # Employment and income
-    ('female_emp_ratio',           'Female Employment',          full, 'Full Panel'),
-    ('gdp_growth',                 'GDP Growth',                 ssa,  'Sub-Saharan Africa'),
+    ('female_emp_ratio',             'Female Employment',          full, 'Full Panel'),
+    ('gdp_growth',                   'GDP Growth',                 ssa,  'Sub-Saharan Africa'),
 ]
 
 for ocol, olbl, sdf, slbl in key_outcomes:
