@@ -41,27 +41,29 @@ full = panel.copy()
 lm   = panel[panel['IncomeGroup'].isin(low_mid)].copy()
 ssa  = panel[panel['Region']=='Sub-Saharan Africa'].copy()
 
-# ── All outcomes ──
 outcomes = [
-    # Education — gross
-    ('primary_enroll_gross_pct',   'Primary Enrollment Gross (%)'),
-    ('secondary_enroll_gross_pct', 'Secondary Enrollment Gross (%)'),
-    ('tertiary_enroll_gross_pct',  'Tertiary Enrollment Gross (%)'),
-    # Education — net and gender
-    ('secondary_net_pct',          'Secondary Enrollment Net (%)'),
-    ('secondary_net_female',       'Secondary Net — Female (%)'),
-    ('secondary_net_male',         'Secondary Net — Male (%)'),
-    ('secondary_gender_gap',       'Secondary Gender Gap (F-M, pp)'),
-    ('tertiary_gross_female',      'Tertiary Gross — Female (%)'),
-    ('tertiary_gross_male',        'Tertiary Gross — Male (%)'),
+    # Education — gross total
+    ('primary_enroll_gross_pct',     'Primary Enrollment Gross (%)'),
+    ('primary_gross_female',         'Primary Gross — Female (%)'),
+    ('primary_gross_male',           'Primary Gross — Male (%)'),
+    ('primary_gender_gap_gross',     'Primary Gender Gap Gross (F-M, pp)'),
+    ('secondary_enroll_gross_pct',   'Secondary Enrollment Gross (%)'),
+    ('secondary_gross_female',       'Secondary Gross — Female (%)'),
+    ('secondary_gross_male',         'Secondary Gross — Male (%)'),
+    ('secondary_gender_gap_gross',   'Secondary Gender Gap Gross (F-M, pp)'),
+    ('tertiary_enroll_gross_pct',    'Tertiary Enrollment Gross (%)'),
+    ('tertiary_gross_female_y',      'Tertiary Gross — Female (%)'),
+    ('tertiary_gross_male_y',        'Tertiary Gross — Male (%)'),
+    # Human capital stock
+    ('avg_years_schooling',          'Avg Years of Schooling (adults)'),
     # Employment
-    ('female_emp_ratio',           'Female Employment Ratio (%)'),
-    ('youth_emp_ratio',            'Youth Employment Ratio (%)'),
-    ('unemployment_pct',           'Unemployment Rate (%)'),
-    ('industry_emp_pct',           'Industry Employment (%)'),
+    ('female_emp_ratio',             'Female Employment Ratio (%)'),
+    ('youth_emp_ratio',              'Youth Employment Ratio (%)'),
+    ('unemployment_pct',             'Unemployment Rate (%)'),
+    ('industry_emp_pct',             'Industry Employment (%)'),
     # Income
-    ('gdp_growth',                 'GDP Growth (%)'),
-    ('gni_per_capita',             'GNI per Capita (USD)'),
+    ('gdp_growth',                   'GDP Growth (%)'),
+    ('gni_per_capita',               'GNI per Capita (USD)'),
 ]
 
 def stars(p):
@@ -74,7 +76,8 @@ def run_basic(df, outcome):
     df = df.dropna(subset=[c for c in cols if c in df.columns]).copy()
     df['did'] = df['treat_500m'] * df['post_500m']
     mod = smf.ols(
-        f'{outcome} ~ did + {controls} + C(year) + C(Q("Country Code"))',
+        f'Q("{outcome}") ~ did + {controls} + '
+        f'C(year) + C(Q("Country Code"))',
         data=df
     ).fit(cov_type='cluster', cov_kwds={'groups': df['Country Code']})
     return (mod.params['did'], mod.bse['did'],
@@ -82,28 +85,31 @@ def run_basic(df, outcome):
             df['Country Code'].nunique())
 
 def run_dynamic(df, outcome):
-    cols = [outcome,'Country Code','year','treat_500m','post_500m','rel_time',
-            'log_gdp_pc_current_usd','population_total',
-            'percent_urban','birth_rate_crude_per_1000']
-    df = df.dropna(subset=[c for c in cols if c in df.columns
-                           and c != 'rel_time']).copy()
+    df = df.dropna(subset=[outcome,'Country Code','year','treat_500m',
+                            'log_gdp_pc_current_usd','population_total',
+                            'percent_urban','birth_rate_crude_per_1000']).copy()
     df['rel_time'] = df['year'] - df['treat_year']
 
-    for l in range(7):  # lags 0-6 now
+    for l in range(7):
         df[f'lag{l}'] = ((df['treat_500m']==1) &
                           (df['rel_time']==l)).astype(float)
     for p in [1,2,3,4]:
-        df[f'pre{p}'] = ((df['treat_500m']==1) & (df['rel_time']==-p)).astype(float)
+        df[f'pre{p}'] = ((df['treat_500m']==1) &
+                          (df['rel_time']==-p)).astype(float)
 
-    lag_terms = ' + '.join([f'lag{l}' for l in range(7)] + ['pre1','pre2','pre3','pre4'])
+    lag_terms = ' + '.join(
+        [f'lag{l}' for l in range(7)] + ['pre1','pre2','pre3','pre4']
+    )
     mod = smf.ols(
-        f'{outcome} ~ {lag_terms} + {controls} + C(year) + C(Q("Country Code"))',
+        f'Q("{outcome}") ~ {lag_terms} + {controls} + '
+        f'C(year) + C(Q("Country Code"))',
         data=df
     ).fit(cov_type='cluster', cov_kwds={'groups': df['Country Code']})
 
     results = []
-    for pp, col in [(-4,'pre4'),(-3,'pre3'),(-2,'pre2'),(-1,'pre1'),(0,'lag0'),(1,'lag1'),
-                    (2,'lag2'),(3,'lag3'),(4,'lag4'),(5,'lag5'),(6,'lag6')]:
+    for pp, col in [(-4,'pre4'),(-3,'pre3'),(-2,'pre2'),(-1,'pre1'),
+                    (0,'lag0'),(1,'lag1'),(2,'lag2'),(3,'lag3'),
+                    (4,'lag4'),(5,'lag5'),(6,'lag6')]:
         results.append({
             'period': pp,
             'coef':   mod.params[col],
@@ -112,15 +118,14 @@ def run_dynamic(df, outcome):
         })
     return pd.DataFrame(results)
 
-# ── Run education treatment separately ──
 def run_edu_treatment(df, outcome):
-    cols = [outcome,'Country Code','year','treat_edu','post_edu',
-            'log_gdp_pc_current_usd','population_total',
-            'percent_urban','birth_rate_crude_per_1000']
-    df = df.dropna(subset=[c for c in cols if c in df.columns]).copy()
+    df = df.dropna(subset=[outcome,'Country Code','year','treat_edu','post_edu',
+                            'log_gdp_pc_current_usd','population_total',
+                            'percent_urban','birth_rate_crude_per_1000']).copy()
     df['did_edu'] = df['treat_edu'] * df['post_edu']
     mod = smf.ols(
-        f'{outcome} ~ did_edu + {controls} + C(year) + C(Q("Country Code"))',
+        f'Q("{outcome}") ~ did_edu + {controls} + '
+        f'C(year) + C(Q("Country Code"))',
         data=df
     ).fit(cov_type='cluster', cov_kwds={'groups': df['Country Code']})
     return (mod.params['did_edu'], mod.bse['did_edu'],
@@ -128,7 +133,7 @@ def run_edu_treatment(df, outcome):
             df['Country Code'].nunique())
 
 # ================================================================
-# PART 1: BASIC DiD — ALL OUTCOMES, ALL SUBSETS
+# PART 1: BASIC DiD
 # ================================================================
 print("\n\n" + "#"*65)
 print("  PART 1: BASIC DiD — Post x Treated")
@@ -156,18 +161,30 @@ for ocol, olbl in outcomes:
             print(f"  {slbl:<25} ERROR: {e}")
 
 # ================================================================
-# PART 2: DYNAMIC DiD — KEY OUTCOMES
+# PART 2: DYNAMIC DiD
 # ================================================================
 print("\n\n" + "#"*65)
 print("  PART 2: DYNAMIC DiD — KEY OUTCOMES")
 print("#"*65)
 
 key_outcomes = [
+    # Primary
+    ('primary_enroll_gross_pct',   'Primary Enrollment Gross',   full, 'Full Panel'),
+    ('primary_enroll_gross_pct',   'Primary Enrollment Gross',   ssa,  'Sub-Saharan Africa'),
+    ('primary_gross_female',       'Primary Gross Female',       full, 'Full Panel'),
+    ('primary_gross_female',       'Primary Gross Female',       ssa,  'Sub-Saharan Africa'),
+    ('primary_gross_male',         'Primary Gross Male',         full, 'Full Panel'),
+    ('primary_gross_male',         'Primary Gross Male',         ssa,  'Sub-Saharan Africa'),
+    # Secondary
     ('secondary_enroll_gross_pct', 'Secondary Enrollment Gross', full, 'Full Panel'),
     ('secondary_enroll_gross_pct', 'Secondary Enrollment Gross', ssa,  'Sub-Saharan Africa'),
-    ('secondary_net_pct',          'Secondary Enrollment Net',   ssa,  'Sub-Saharan Africa'),
-    ('secondary_net_female',       'Secondary Net Female',       ssa,  'Sub-Saharan Africa'),
-    ('secondary_net_male',         'Secondary Net Male',         ssa,  'Sub-Saharan Africa'),
+    ('secondary_gross_female',     'Secondary Gross Female',     ssa,  'Sub-Saharan Africa'),
+    ('secondary_gross_male',       'Secondary Gross Male',       ssa,  'Sub-Saharan Africa'),
+    ('secondary_gender_gap_gross', 'Secondary Gender Gap Gross', ssa,  'Sub-Saharan Africa'),
+    # Human capital stock
+    ('avg_years_schooling',        'Avg Years of Schooling',     full, 'Full Panel'),
+    ('avg_years_schooling',        'Avg Years of Schooling',     ssa,  'Sub-Saharan Africa'),
+    # Employment and income
     ('female_emp_ratio',           'Female Employment',          full, 'Full Panel'),
     ('gdp_growth',                 'GDP Growth',                 ssa,  'Sub-Saharan Africa'),
 ]
@@ -198,11 +215,14 @@ print("#"*65)
 
 edu_outcomes = [
     ('primary_enroll_gross_pct',   'Primary Enrollment Gross (%)'),
+    ('primary_gross_female',       'Primary Gross Female (%)'),
+    ('primary_gross_male',         'Primary Gross Male (%)'),
     ('secondary_enroll_gross_pct', 'Secondary Enrollment Gross (%)'),
+    ('secondary_gross_female',     'Secondary Gross Female (%)'),
+    ('secondary_gross_male',       'Secondary Gross Male (%)'),
+    ('secondary_gender_gap_gross', 'Secondary Gender Gap Gross (pp)'),
     ('tertiary_enroll_gross_pct',  'Tertiary Enrollment Gross (%)'),
-    ('secondary_net_pct',          'Secondary Enrollment Net (%)'),
-    ('secondary_net_female',       'Secondary Net Female (%)'),
-    ('secondary_net_male',         'Secondary Net Male (%)'),
+    ('avg_years_schooling',        'Avg Years of Schooling (adults)'),
 ]
 
 for ocol, olbl in edu_outcomes:
@@ -219,7 +239,7 @@ for ocol, olbl in edu_outcomes:
             print(f"  {slbl:<25} ERROR: {e}")
 
 # ================================================================
-# PART 4: SECTOR DOSE-RESPONSE — NEW DATA
+# PART 4: SECTOR DOSE-RESPONSE
 # ================================================================
 print("\n\n" + "#"*65)
 print("  PART 4: SECTOR DOSE-RESPONSE — CLG AIDDATA")
@@ -234,10 +254,14 @@ sector_vars = [
 ]
 
 sector_outcomes = [
+    ('primary_enroll_gross_pct',   'Primary Enrollment Gross'),
+    ('primary_gross_female',       'Primary Gross Female'),
+    ('primary_gross_male',         'Primary Gross Male'),
     ('secondary_enroll_gross_pct', 'Secondary Enrollment Gross'),
-    ('secondary_net_pct',          'Secondary Enrollment Net'),
-    ('secondary_net_female',       'Secondary Net Female'),
-    ('secondary_net_male',         'Secondary Net Male'),
+    ('secondary_gross_female',     'Secondary Gross Female'),
+    ('secondary_gross_male',       'Secondary Gross Male'),
+    ('secondary_gender_gap_gross', 'Secondary Gender Gap Gross'),
+    ('avg_years_schooling',        'Avg Years of Schooling'),
     ('female_emp_ratio',           'Female Employment'),
     ('gdp_growth',                 'GDP Growth'),
 ]
@@ -255,14 +279,14 @@ for ocol, olbl in sector_outcomes:
         for svar, slabel in sector_vars:
             try:
                 mod = smf.ols(
-                    f'{ocol} ~ {svar} + {controls} + '
+                    f'Q("{ocol}") ~ {svar} + {controls} + '
                     f'C(year) + C(Q("Country Code"))',
                     data=df2
                 ).fit(cov_type='cluster',
                       cov_kwds={'groups': df2['Country Code']})
-                c  = mod.params[svar]
-                se = mod.bse[svar]
-                p  = mod.pvalues[svar]
+                c   = mod.params[svar]
+                se  = mod.bse[svar]
+                p   = mod.pvalues[svar]
                 sig = stars(p)
                 print(f"    {slabel:<25} {c:>+8.4f} {se:>8.4f} "
                       f"{p:>7.3f} {sig:>4}")

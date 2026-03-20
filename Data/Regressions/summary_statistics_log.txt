@@ -1,0 +1,201 @@
+======================================================================
+  SUMMARY STATISTICS
+======================================================================
+
+######################################################################
+  Full Panel  |  205 countries  |  4,920 obs
+######################################################################
+  Variable                                 N     Mean       SD      Min      Max   Miss%
+  ----------------------------------------------------------------------------------
+  Secondary Enrollment Gross (%)        3491    82.90    28.39     3.35   164.08   29.0%
+  Secondary Gross Female (%)            3427    83.48    30.01     0.00   174.84   30.3%
+  Secondary Gross Male (%)              3423    82.76    27.20     3.92   170.07   30.4%
+  Secondary Gender Gap (F-M, pp)        3423     0.72     7.76   -34.07    36.47   30.4%
+  Primary Enrollment Gross (%)          3998   101.77    13.80    20.92   183.99   18.7%
+  Primary Gross Female (%)              3977   100.37    14.86     0.00   182.14   19.2%
+  Primary Gross Male (%)                3973   103.08    13.43    22.80   185.81   19.2%
+  Tertiary Enrollment Gross (%)         3089    40.36    28.58     0.12   166.67   37.2%
+  Tertiary Gross Female (%)             2979    46.13    33.12     0.12   171.99   39.5%
+  Tertiary Gross Male (%)               2979    36.31    25.26     0.11   161.73   39.5%
+  Avg Years of Schooling (adults)       4538     8.31     3.26     0.98    14.30    7.8%
+  Female Employment Ratio (%)           3802    46.32    15.77     3.56    85.91   22.7%
+  Youth Employment Ratio (%)            3802    37.55    14.89     5.18    78.33   22.7%
+  Unemployment Rate (%)                 3802     7.81     5.96     0.10    37.32   22.7%
+  GDP Growth (Annual %)                 4097     3.56     5.54   -54.40    75.31   16.7%
+  GNI per Capita (USD)                  4044 13129.10 18732.23   110.00 134500.00   17.8%
+  Poverty Headcount $3/day (%)          1699     8.96    16.74     0.00    93.80   65.5%
+  Log GDP per Capita                    4124     8.55     1.55     4.70    12.23   16.2%
+  Urban Population (%)                  4181    58.32    23.45     8.04   100.00   15.0%
+  Birth Rate (per 1,000)                3849    21.26    11.04     5.00    53.39   21.8%
+  Log BRI Investment ($M)               4920     8.29     8.98     0.00    24.02    0.0%
+
+######################################################################
+  Treated ($500M+)  |  99 countries  |  2,376 obs
+######################################################################
+  Variable                                 N     Mean       SD      Min      Max   Miss%
+  ----------------------------------------------------------------------------------
+  Secondary Enrollment Gross (%)        1576    67.84    27.52     5.94   138.90   33.7%
+  Secondary Gross Female (%)            1540    67.27    29.73     0.00   146.79   35.2%
+  Secondary Gross Male (%)              1536    68.56    25.77     7.35   134.43   35.4%
+  Secondary Gender Gap (F-M, pp)        1536    -1.34     8.41   -34.07    24.58   35.4%
+  Primary Enrollment Gross (%)          1904   100.92    16.86    21.46   163.17   19.9%
+  Primary Gross Female (%)              1898    98.71    18.59     0.00   167.49   20.1%
+  Primary Gross Male (%)                1894   103.13    16.12    25.29   158.91   20.3%
+  Tertiary Enrollment Gross (%)         1497    27.49    23.71     0.21   127.58   37.0%
+  Tertiary Gross Female (%)             1436    30.27    27.83     0.17   147.85   39.6%
+  Tertiary Gross Male (%)               1436    26.15    20.67     0.13   125.24   39.6%
+  Avg Years of Schooling (adults)       2316     6.83     2.98     1.16    12.87    2.5%
+  Female Employment Ratio (%)           2008    46.07    18.18     3.56    85.91   15.5%
+  Youth Employment Ratio (%)            2008    37.85    15.14     5.18    78.33   15.5%
+  Unemployment Rate (%)                 2008     7.80     6.42     0.12    37.32   15.5%
+  GDP Growth (Annual %)                 2000     4.30     5.40   -36.66    63.38   15.8%
+  GNI per Capita (USD)                  1987  3227.76  3193.62   110.00 17920.00   16.4%
+  Poverty Headcount $3/day (%)           702    17.22    21.29     0.00    93.80   70.5%
+  Log GDP per Capita                    2010     7.58     1.11     4.70     9.93   15.4%
+  Urban Population (%)                  2026    48.85    20.30     8.04    92.68   14.7%
+  Birth Rate (per 1,000)                1876    26.81    10.97     6.98    53.39   21.0%
+  Log BRI Investment ($M)               2376    14.50     7.56     0.00    24.02    0.0%
+
+######################################################################
+  Never Treated  |  106 countries  |  2,544 obs
+######################################################################
+  Variable                                 N     Mean       SD      Min      Max   Miss%
+  ----------------------------------------------------------------------------------
+  Secondary Enrollment Gross (%)        1915    95.30    22.50     3.35   164.08   24.7%
+  Secondary Gross Female (%)            1887    96.72    22.90     2.76   174.84   25.8%
+  Secondary Gross Male (%)              1887    94.32    22.44     3.92   170.07   25.8%
+  Secondary Gender Gap (F-M, pp)        1887     2.40     6.73   -30.47    36.47   25.8%
+  Primary Enrollment Gross (%)          2094   102.55    10.19    20.92   183.99   17.7%
+  Primary Gross Female (%)              2079   101.88    10.10    16.40   182.14   18.3%
+  Primary Gross Male (%)                2079   103.04    10.39    22.80   185.81   18.3%
+  Tertiary Enrollment Gross (%)         1592    52.47    27.47     0.12   166.67   37.4%
+  Tertiary Gross Female (%)             1543    60.89    30.75     0.12   171.99   39.3%
+  Tertiary Gross Male (%)               1543    45.76    25.48     0.11   161.73   39.3%
+  Avg Years of Schooling (adults)       2222     9.85     2.80     0.98    14.30   12.7%
+  Female Employment Ratio (%)           1794    46.60    12.55     8.45    81.94   29.5%
+  Youth Employment Ratio (%)            1794    37.22    14.60    10.46    78.20   29.5%
+  Unemployment Rate (%)                 1794     7.81     5.41     0.10    36.47   29.5%
+  GDP Growth (Annual %)                 2097     2.86     5.58   -54.40    75.31   17.6%
+  GNI per Capita (USD)                  2057 22693.50 22223.77   260.00 134500.00   19.1%
+  Poverty Headcount $3/day (%)           997     3.15     8.75     0.00    75.70   60.8%
+  Log GDP per Capita                    2114     9.46     1.34     5.52    12.23   16.9%
+  Urban Population (%)                  2155    67.23    22.73    14.41   100.00   15.3%
+  Birth Rate (per 1,000)                1973    15.99     8.13     5.00    48.91   22.4%
+  Log BRI Investment ($M)               2544     2.49     5.73     0.00    19.93    0.0%
+
+######################################################################
+  Sub-Saharan Africa  |  48 countries  |  1,152 obs
+######################################################################
+  Variable                                 N     Mean       SD      Min      Max   Miss%
+  ----------------------------------------------------------------------------------
+  Secondary Enrollment Gross (%)         649    45.58    24.31     3.35   112.31   43.7%
+  Secondary Gross Female (%)             635    44.30    27.03     2.76   116.37   44.9%
+  Secondary Gross Male (%)               635    47.29    22.40     3.92   111.04   44.9%
+  Secondary Gender Gap (F-M, pp)         635    -2.98     8.76   -26.98    18.83   44.9%
+  Primary Enrollment Gross (%)           877    98.55    22.69    20.92   163.17   23.9%
+  Primary Gross Female (%)               871    95.40    24.37    16.40   167.49   24.4%
+  Primary Gross Male (%)                 871   101.63    21.79    22.80   158.91   24.4%
+  Tertiary Enrollment Gross (%)          587     8.88     8.31     0.33    44.20   49.0%
+  Tertiary Gross Female (%)              547     8.73    10.71     0.17    66.45   52.5%
+  Tertiary Gross Male (%)                547     9.43     6.93     0.49    37.57   52.5%
+  Avg Years of Schooling (adults)       1107     4.98     2.39     0.98    11.61    3.9%
+  Female Employment Ratio (%)            901    54.49    16.79    14.58    85.91   21.8%
+  Youth Employment Ratio (%)             901    41.36    17.70     7.59    74.85   21.8%
+  Unemployment Rate (%)                  901     7.98     7.04     0.32    36.47   21.8%
+  GDP Growth (Annual %)                  917     4.40     4.94   -20.81    63.38   20.4%
+  GNI per Capita (USD)                   909  1937.17  2750.13   110.00 18700.00   21.1%
+  Poverty Headcount $3/day (%)           154    47.39    21.73     0.50    87.60   86.6%
+  Log GDP per Capita                     917     7.01     1.04     4.70     9.86   20.4%
+  Urban Population (%)                   925    38.38    15.24     8.04    89.90   19.7%
+  Birth Rate (per 1,000)                 864    36.08     8.24    10.10    53.39   25.0%
+  Log BRI Investment ($M)               1152    13.82     7.43     0.00    23.56    0.0%
+
+######################################################################
+  SSA Treated  |  38 countries  |  912 obs
+######################################################################
+  Variable                                 N     Mean       SD      Min      Max   Miss%
+  ----------------------------------------------------------------------------------
+  Secondary Enrollment Gross (%)         514    42.18    22.59     5.94   106.44   43.6%
+  Secondary Gross Female (%)             503    39.83    24.67     4.55   111.09   44.8%
+  Secondary Gross Male (%)               503    44.86    21.18     7.35   104.70   44.8%
+  Secondary Gender Gap (F-M, pp)         503    -5.03     7.75   -26.98    11.88   44.8%
+  Primary Enrollment Gross (%)           702    98.20    23.13    25.57   163.17   23.0%
+  Primary Gross Female (%)               700    94.74    24.97    25.77   167.49   23.2%
+  Primary Gross Male (%)                 700   101.68    22.02    25.29   158.91   23.2%
+  Tertiary Enrollment Gross (%)          493     8.79     8.19     0.33    44.20   45.9%
+  Tertiary Gross Female (%)              457     8.23     9.95     0.17    53.07   49.9%
+  Tertiary Gross Male (%)                457     9.66     7.13     0.49    37.57   49.9%
+  Avg Years of Schooling (adults)        899     4.90     2.34     1.16    11.61    1.4%
+  Female Employment Ratio (%)            747    56.92    16.08    14.58    85.91   18.1%
+  Youth Employment Ratio (%)             747    43.36    17.13     7.59    74.85   18.1%
+  Unemployment Rate (%)                  747     7.12     6.60     0.32    34.01   18.1%
+  GDP Growth (Annual %)                  739     4.58     5.11   -17.00    63.38   19.0%
+  GNI per Capita (USD)                   731  1675.51  2209.28   110.00 12700.00   19.8%
+  Poverty Headcount $3/day (%)           129    49.24    20.96     0.50    87.60   85.9%
+  Log GDP per Capita                     739     6.92     1.00     4.70     9.81   19.0%
+  Urban Population (%)                   747    37.68    14.88     8.04    89.90   18.1%
+  Birth Rate (per 1,000)                 698    37.35     7.57    10.10    53.39   23.5%
+  Log BRI Investment ($M)                912    15.25     6.62     0.00    23.56    0.0%
+
+######################################################################
+  SSA Never Treated  |  10 countries  |  240 obs
+######################################################################
+  Variable                                 N     Mean       SD      Min      Max   Miss%
+  ----------------------------------------------------------------------------------
+  Secondary Enrollment Gross (%)         135    58.53    26.27     3.35   112.31   43.8%
+  Secondary Gross Female (%)             132    61.37    28.84     2.76   116.37   45.0%
+  Secondary Gross Male (%)               132    56.53    24.50     3.92   111.04   45.0%
+  Secondary Gender Gap (F-M, pp)         132     4.84     7.97   -13.03    18.83   45.0%
+  Primary Enrollment Gross (%)           175    99.97    20.85    20.92   132.24   27.1%
+  Primary Gross Female (%)               171    98.10    21.58    16.40   135.67   28.7%
+  Primary Gross Male (%)                 171   101.44    20.91    22.80   130.98   28.7%
+  Tertiary Enrollment Gross (%)           94     9.34     8.94     1.07    42.21   60.8%
+  Tertiary Gross Female (%)               90    11.32    13.70     0.41    66.45   62.5%
+  Tertiary Gross Male (%)                 90     8.22     5.74     0.73    24.26   62.5%
+  Avg Years of Schooling (adults)        208     5.37     2.59     0.98    11.20   13.3%
+  Female Employment Ratio (%)            154    42.74    15.15    15.57    75.06   35.8%
+  Youth Employment Ratio (%)             154    31.70    17.31    10.46    71.68   35.8%
+  Unemployment Rate (%)                  154    12.12     7.65     2.69    36.47   35.8%
+  GDP Growth (Annual %)                  178     3.64     4.13   -20.81    15.84   25.8%
+  GNI per Capita (USD)                   178  3011.74  4150.23   260.00 18700.00   25.8%
+  Poverty Headcount $3/day (%)            25    37.84    23.55     0.60    75.70   89.6%
+  Log GDP per Capita                     178     7.36     1.09     5.52     9.86   25.8%
+  Urban Population (%)                   178    41.32    16.41    18.00    75.03   25.8%
+  Birth Rate (per 1,000)                 166    30.72     8.78    12.57    48.91   30.8%
+  Log BRI Investment ($M)                240     8.39     7.84     0.00    19.01    0.0%
+
+
+######################################################################
+  TREATMENT TIMING
+######################################################################
+
+  Total treated:           99
+  Never treated:           106
+  Median treatment year:   2009
+  Mean treatment year:     2009.1
+
+  Treated with sec data:   97
+  Missing sec data:
+  ['DJI', 'ZMB']
+
+
+######################################################################
+  SSA PRE-TREATMENT BALANCE CHECK
+######################################################################
+
+  Variable                               Treated    Control       Diff    p-val
+  ---------------------------------------------------------------------------
+  Secondary Enrollment Gross (%)           34.00      58.53     -24.54   0.000***
+  Secondary Gross Female (%)               31.01      61.37     -30.35   0.000***
+  Secondary Gross Male (%)                 37.52      56.53     -19.01   0.000***
+  Avg Years of Schooling                    3.95       5.37      -1.42   0.000***
+  Log GDP per Capita                        6.41       7.36      -0.95   0.000***
+  Female Employment Ratio (%)              60.21      42.74     +17.47   0.000***
+  Urban Population (%)                     32.32      41.32      -9.00   0.000***
+  Birth Rate (per 1,000)                   39.55      30.72      +8.83   0.000***
+  GDP Growth (%)                            4.69       3.64      +1.05   0.041**
+
+
+Saved: Data/Regressions/summary_statistics.xlsx
+Saved: Data/Regressions/summary_statistics_clean.txt
+Done.

@@ -1,5 +1,5 @@
 import pyfixest as pf
-from pyfixest.estimation.estimation import feols
+from pyfixest.estimation.estimation import feols, sunab
 import pandas as pd
 import numpy as np
 import pyfixest as pf

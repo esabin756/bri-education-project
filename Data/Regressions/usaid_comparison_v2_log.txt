@@ -1,0 +1,153 @@
+=================================================================
+  USAID vs CHINA EDUCATION AID — RESTRICTED SAMPLE COMPARISON
+  Strategy: compare dose-response coefficients within the
+  same set of countries and years that received BOTH types
+  of aid. Controls for targeting differences.
+=================================================================
+
+Countries receiving Chinese investment:    138
+Countries receiving USAID education aid:   145
+Countries receiving BOTH:                  125
+
+Restricted panel: (3000, 50)
+SSA restricted:   (1104, 50)
+SSA countries:    46
+
+
+#################################################################
+  DOSE-RESPONSE COMPARISON — RESTRICTED SAMPLE
+  Only countries receiving BOTH Chinese and USAID education aid
+  Same regression spec for both donors — fair comparison
+#################################################################
+
+  Secondary Enrollment Gross (%)
+
+    Full Restricted Sample (125 countries)
+    Donor    Sector                 Coef       SE       p       N     
+    ----------------------------------------------------------
+    USAID    Total Education     +0.0975   0.5728   0.865    1849     
+    USAID    Basic Education     -0.7776   0.5699   0.172    1849     
+    China    Education           +0.0117   0.0330   0.722    1849     
+    China    Transport           +0.0537   0.0297   0.070    1849    * <--
+    China    Energy              +0.0562   0.0357   0.116    1849     
+    China    Health              -0.0959   0.0345   0.005    1849  *** <--
+
+    SSA Restricted (46 countries)
+    Donor    Sector                 Coef       SE       p       N     
+    ----------------------------------------------------------
+    USAID    Total Education     +0.3173   0.5585   0.570     586     
+    USAID    Basic Education     +0.2868   0.5622   0.610     586     
+    China    Education           +0.0772   0.0496   0.120     586     
+    China    Transport           +0.0903   0.0452   0.046     586   ** <--
+    China    Energy              +0.0814   0.0579   0.159     586     
+    China    Health              -0.0657   0.0589   0.265     586     
+
+  Primary Enrollment Gross (%)
+
+    Full Restricted Sample (125 countries)
+    Donor    Sector                 Coef       SE       p       N     
+    ----------------------------------------------------------
+    USAID    Total Education     +0.1541   0.8072   0.849    2229     
+    USAID    Basic Education     +0.2142   0.7994   0.789    2229     
+    China    Education           +0.0275   0.0392   0.484    2229     
+    China    Transport           +0.0147   0.0290   0.612    2229     
+    China    Energy              +0.0311   0.0348   0.372    2229     
+    China    Health              +0.0134   0.0388   0.729    2229     
+
+    SSA Restricted (46 countries)
+    Donor    Sector                 Coef       SE       p       N     
+    ----------------------------------------------------------
+    USAID    Total Education     -0.8119   0.9669   0.401     782     
+    USAID    Basic Education     -1.3851   0.9391   0.140     782     
+    China    Education           -0.0126   0.0621   0.839     782     
+    China    Transport           +0.0668   0.0439   0.128     782     
+    China    Energy              +0.1090   0.0614   0.076     782    * <--
+    China    Health              +0.0356   0.0541   0.511     782     
+
+  Tertiary Enrollment Gross (%)
+
+    Full Restricted Sample (125 countries)
+    Donor    Sector                 Coef       SE       p       N     
+    ----------------------------------------------------------
+    USAID    Total Education     -1.6570   0.6255   0.008    1686  *** <--
+    USAID    Basic Education     -2.0709   0.6107   0.001    1686  *** <--
+    China    Education           -0.0320   0.0381   0.402    1686     
+    China    Transport           +0.0378   0.0334   0.258    1686     
+    China    Energy              +0.0706   0.0488   0.148    1686     
+    China    Health              -0.0515   0.0373   0.167    1686     
+
+    SSA Restricted (46 countries)
+    Donor    Sector                 Coef       SE       p       N     
+    ----------------------------------------------------------
+    USAID    Total Education     -0.5004   0.3829   0.191     538     
+    USAID    Basic Education     -0.4835   0.3998   0.226     538     
+    China    Education           +0.0064   0.0189   0.734     538     
+    China    Transport           -0.0235   0.0250   0.348     538     
+    China    Energy              +0.0250   0.0290   0.388     538     
+    China    Health              -0.0600   0.0262   0.022     538   ** <--
+
+  Secondary Enrollment Net (%)
+
+    Full Restricted Sample (125 countries)
+    Donor    Sector                 Coef       SE       p       N     
+    ----------------------------------------------------------
+    USAID    Total Education     -0.3866   0.7222   0.592     999     
+    USAID    Basic Education     -1.1922   0.8482   0.160     999     
+    China    Education           -0.0092   0.0340   0.788     999     
+    China    Transport           +0.0227   0.0282   0.422     999     
+    China    Energy              +0.0692   0.0339   0.041     999   ** <--
+    China    Health              +0.0036   0.0347   0.916     999     
+
+    SSA Restricted (46 countries)
+    Donor    Sector                 Coef       SE       p       N     
+    ----------------------------------------------------------
+    USAID    Total Education     -0.3362   0.5043   0.505     299     
+    USAID    Basic Education     -0.8710   0.6117   0.154     299     
+    China    Education           +0.0111   0.0465   0.811     299     
+    China    Transport           +0.0306   0.0401   0.446     299     
+    China    Energy              -0.0053   0.0384   0.890     299     
+    China    Health              +0.0045   0.0524   0.931     299     
+
+  GDP Growth (%)
+
+    Full Restricted Sample (125 countries)
+    Donor    Sector                 Coef       SE       p       N     
+    ----------------------------------------------------------
+    USAID    Total Education     +0.2071   0.2107   0.326    2333     
+    USAID    Basic Education     +0.0440   0.2102   0.834    2333     
+    China    Education           +0.0176   0.0155   0.256    2333     
+    China    Transport           +0.0271   0.0138   0.049    2333   ** <--
+    China    Energy              -0.0008   0.0175   0.965    2333     
+    China    Health              +0.0293   0.0166   0.077    2333    * <--
+
+    SSA Restricted (46 countries)
+    Donor    Sector                 Coef       SE       p       N     
+    ----------------------------------------------------------
+    USAID    Total Education     +0.1079   0.3670   0.769     823     
+    USAID    Basic Education     -0.0852   0.3552   0.810     823     
+    China    Education           +0.0371   0.0269   0.168     823     
+    China    Transport           +0.0415   0.0262   0.113     823     
+    China    Energy              -0.0096   0.0412   0.816     823     
+    China    Health              +0.0526   0.0277   0.058     823    * <--
+
+
+#################################################################
+  SUMMARY: KEY COEFFICIENTS FOR THESIS TABLE
+  Secondary Enrollment — Restricted Sample Comparison
+#################################################################
+
+  Sample                    Donor    Sector                 Coef       p Interpretation
+  --------------------------------------------------------------------------------
+  Full Restricted           USAID    Total Education     +0.0975   0.865       Null
+  Full Restricted           USAID    Basic Education     -0.7776   0.172       Null
+  Full Restricted           China    Education           +0.0117   0.722       Null
+  Full Restricted           China    Transport           +0.0537   0.070    *  Positive*
+  Full Restricted           China    Energy              +0.0562   0.116       Null
+  SSA Restricted            USAID    Total Education     +0.3173   0.570       Null
+  SSA Restricted            USAID    Basic Education     +0.2868   0.610       Null
+  SSA Restricted            China    Education           +0.0772   0.120       Null
+  SSA Restricted            China    Transport           +0.0903   0.046   **  Positive*
+  SSA Restricted            China    Energy              +0.0814   0.159       Null
+
+
+Done.

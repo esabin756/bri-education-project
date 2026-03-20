@@ -33,6 +33,54 @@ panel = skeleton.merge(outcomes, on=['Country Code','year'], how='left')
 # ── Merge net enrollment ──
 panel = panel.merge(net_enroll, on=['Country Code','year'], how='left')
 
+# ── Gender disaggregated gross enrollment ──
+print("Cleaning gender gross enrollment...")
+gen = pd.read_csv('Data/Raw_WBD/gender_enrollment_rates_gross.csv')
+
+keep_series = {
+    'School enrollment, secondary, female (% gross)': 'secondary_gross_female',
+    'School enrollment, secondary, male (% gross)':   'secondary_gross_male',
+    'School enrollment, primary, female (% gross)':   'primary_gross_female',
+    'School enrollment, primary, male (% gross)':     'primary_gross_male',
+    'School enrollment, tertiary, female (% gross)':  'tertiary_gross_female',
+    'School enrollment, tertiary, male (% gross)':    'tertiary_gross_male',
+}
+
+gen = gen[gen['Series Name'].isin(keep_series.keys())].copy()
+gen['var_name'] = gen['Series Name'].map(keep_series)
+
+yr_cols = [c for c in gen.columns if 'YR' in c
+           and 2000 <= int(c[:4]) <= 2023]
+
+gen_long = gen.melt(
+    id_vars=['Country Code','var_name'],
+    value_vars=yr_cols,
+    var_name='year_str', value_name='value'
+)
+gen_long['year']  = gen_long['year_str'].str[:4].astype(int)
+gen_long['value'] = pd.to_numeric(gen_long['value'], errors='coerce')
+
+gen_panel = gen_long.pivot_table(
+    index=['Country Code','year'],
+    columns='var_name', values='value'
+).reset_index()
+gen_panel.columns.name = None
+
+# Add gender gap variables
+gen_panel['secondary_gender_gap_gross'] = (
+    gen_panel['secondary_gross_female'] - gen_panel['secondary_gross_male'])
+gen_panel['primary_gender_gap_gross'] = (
+    gen_panel['primary_gross_female'] - gen_panel['primary_gross_male'])
+gen_panel['tertiary_gender_gap_gross'] = (
+    gen_panel['tertiary_gross_female'] - gen_panel['tertiary_gross_male'])
+
+print(f"  Gender enrollment: {gen_panel['Country Code'].nunique()} countries")
+print(f"  Missing secondary female: {gen_panel['secondary_gross_female'].isna().mean()*100:.1f}%")
+print(f"  Missing secondary male:   {gen_panel['secondary_gross_male'].isna().mean()*100:.1f}%")
+
+# Merge into panel
+panel = panel.merge(gen_panel, on=['Country Code','year'], how='left')
+
 # ── Merge income classifications ──
 panel = panel.merge(
     class_df[['Country Code','Region','IncomeGroup']],
@@ -102,6 +150,13 @@ panel = panel.merge(
 for col in sector_cols[2:]:
     panel[col] = panel[col].fillna(0)
 
+
+edyr = pd.read_csv('Data/Raw_WBD/average_years_schooling.csv')
+edyr = edyr.rename(columns={'Code':'Country Code','Year':'year','Both genders':'avg_years_schooling'})
+edyr = edyr[edyr['Country Code'].notna()][['Country Code','year','avg_years_schooling']]
+edyr = edyr[edyr['year'].between(2000,2023)]
+panel = panel.merge(edyr, on=['Country Code','year'], how='left')
+
 print(f"\nFinal panel: {panel.shape}")
 print(f"Countries: {panel['Country Code'].nunique()}")
 print(f"Years: {panel['year'].min()} - {panel['year'].max()}")
@@ -116,6 +171,9 @@ for col in ['primary_enroll_gross_pct','secondary_enroll_gross_pct',
             'log_gdp_pc_current_usd','female_emp_ratio','gdp_growth']:
     miss = panel[col].isna().mean()*100
     print(f"  {col:<35} {miss:.1f}% missing")
+
+panel = panel[panel['Region'].notna()].copy()
+print(f"After dropping aggregates: {panel['Country Code'].nunique()} countries")
 
 panel.to_csv('Data/Panel/panel_2023.csv', index=False)
 print("\nSaved: Data/Panel/panel_2023.csv")
