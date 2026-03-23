@@ -1,10 +1,9 @@
 import pyfixest as pf
-from pyfixest.estimation.estimation import feols, sunab
 import pandas as pd
 import numpy as np
-import pyfixest as pf
 
 panel = pd.read_csv('Data/Panel/panel_with_income.csv')
+panel.columns = panel.columns.str.replace(' ', '_', regex=False)
 import sys
 
 _terminal = sys.stdout
@@ -41,20 +40,26 @@ def run_cs(df, outcome, label, subset_label):
 
     print(f"\n{'='*60}")
     print(f"  {subset_label} — {label}")
-    print(f"  N countries={df['Country Code'].nunique()}, N obs={len(df)}")
+    print(f"  N countries={df['Country_Code'].nunique()}, N obs={len(df)}")
     print(f"{'='*60}")
 
     try:
-        cs = pf.feols(
-            f'{outcome} ~ sunab(g, year) + {controls} | Country Code + year',
+        cs = pf.event_study(
             data=df,
-            vcov={'CRV1': 'Country Code'}
+            yname=outcome,
+            idname='Country_Code',
+            tname='year',
+            gname='g',
+            xfml=controls,
+            cluster='Country_Code',
+            estimator='saturated',
+            att=True,
         )
-        print(cs.summary())
+        print(cs.tidy())
 
         # ATT — average treatment effect on treated
         print("\n  Sun & Abraham ATT decomposition printed above.")
-        print("  Look for 'ATT' aggregate and event-time coefficients.")
+        print("  Look for ATT-related rows and event-time coefficients.")
 
     except Exception as e:
         print(f"  ERROR: {e}")
@@ -84,4 +89,5 @@ for sdf, slbl in [
         run_cs(sdf, col, lbl, slbl)
 
 print("\n\nDone.")
+sys.stdout = _terminal
 log.close()

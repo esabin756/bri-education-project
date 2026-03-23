@@ -1,12 +1,27 @@
 =================================================================
   YEARS OF SCHOOLING — 2016 EDUCATION ACTION PLAN
-  Did years of schooling improve in BRI countries after 2016?
+  Panel: 205 countries, 2000-2023
+  Avg years schooling: 4538 obs, 7.8% missing
 =================================================================
 
 #################################################################
-  PART 1: DID YEARS OF SCHOOLING CHANGE POST-2016
-  Coef of interest: Treated x Post-2016
+  PART 1: POST-2016 INTERACTION — CUTOFF SENSITIVITY
+  Coefficient of interest: Treated x Post-Cutoff
 #################################################################
+
+  Cutoff year: 2014
+  Subset                        Coef       SE       p       N     
+  ----------------------------------------------------------
+  Full Panel                 +0.1190   0.0980   0.225    3634     
+  Low & Middle Income        +0.1180   0.1266   0.352    2327     
+  Sub-Saharan Africa         -0.0739   0.2373   0.756     843     
+
+  Cutoff year: 2015
+  Subset                        Coef       SE       p       N     
+  ----------------------------------------------------------
+  Full Panel                 +0.1182   0.0979   0.227    3634     
+  Low & Middle Income        +0.1150   0.1299   0.376    2327     
+  Sub-Saharan Africa         -0.0801   0.2368   0.735     843     
 
   Cutoff year: 2016
   Subset                        Coef       SE       p       N     
@@ -25,7 +40,6 @@
 
 #################################################################
   PART 2: SEPARATE DiD PRE vs POST 2016
-  Did the treatment effect on years of schooling change?
 #################################################################
 
   Pre-2016  (2000-2015)
@@ -45,37 +59,98 @@
 
 #################################################################
   PART 3: DYNAMIC DiD — POST-2016 EDUCATION INVESTMENT
-  Does education investment after 2016 affect years of schooling?
-  Expecting effects at Lag(5)+ given slow-moving stock variable
+  Education investment after 2016 → years of schooling?
 #################################################################
 
-  Full Panel (N treated=43)
-  Period         Coef       SE       p     
-  --------------------------------------
-  Pre(3)      +0.0384   0.0507   0.448     
-  Pre(2)      +0.0276   0.0826   0.739     
-  Pre(1)      +0.0000   0.0000   1.000     
-  Lag(0)      +0.0941   0.1766   0.594     
-  Lag(1)      +0.1091   0.2208   0.621     
-  Lag(2)      +0.1306   0.2675   0.625     
-  Lag(3)      +0.0340   0.3351   0.919     
-  Lag(4)      -0.1827   0.4060   0.653     
-  Lag(5)      -0.1774   0.5042   0.725      <- expect effect here
-  [N obs=353, 41 countries]
+  Avg Years of Schooling
 
-  Sub-Saharan Africa (N treated=23)
-  Period         Coef       SE       p     
-  --------------------------------------
-  Pre(3)      +0.0023   0.0759   0.976     
-  Pre(2)      -0.0207   0.1414   0.884     
-  Pre(1)      +0.0000   0.0000   1.000     
-  Lag(0)      -0.0261   0.2784   0.925     
-  Lag(1)      +0.0035   0.3461   0.992     
-  Lag(2)      +0.0875   0.4335   0.840     
-  Lag(3)      +0.0885   0.5550   0.873     
-  Lag(4)      -0.0426   0.6404   0.947     
-  Lag(5)      +0.0162   0.7886   0.984      <- expect effect here
-  [N obs=186, 23 countries]
+    Full Panel (N treated=43)
+    Period         Coef       SE       p     
+    --------------------------------------
+    Pre(3)      +0.0384   0.0507   0.448     
+    Pre(2)      +0.0276   0.0826   0.739     
+    Pre(1)      +0.0000   0.0000   1.000     
+    Lag(0)      +0.0941   0.1766   0.594     
+    Lag(1)      +0.1091   0.2208   0.621     
+    Lag(2)      +0.1306   0.2675   0.625     
+    Lag(3)      +0.0340   0.3351   0.919     
+    Lag(4)      -0.1827   0.4060   0.653     
+    Lag(5)      -0.1774   0.5042   0.725     
+    [N obs=353, 41 countries]
+
+    Sub-Saharan Africa (N treated=23)
+    Period         Coef       SE       p     
+    --------------------------------------
+    Pre(3)      +0.0023   0.0759   0.976     
+    Pre(2)      -0.0207   0.1414   0.884     
+    Pre(1)      +0.0000   0.0000   1.000     
+    Lag(0)      -0.0261   0.2784   0.925     
+    Lag(1)      +0.0035   0.3461   0.992     
+    Lag(2)      +0.0875   0.4335   0.840     
+    Lag(3)      +0.0885   0.5550   0.873     
+    Lag(4)      -0.0426   0.6404   0.947     
+    Lag(5)      +0.0162   0.7886   0.984     
+    [N obs=186, 23 countries]
+
+  Secondary Enrollment Gross
+
+    Full Panel (N treated=43)
+    Period         Coef       SE       p     
+    --------------------------------------
+    Pre(3)      -0.9432   0.8450   0.264     
+    Pre(2)      -1.2728   1.3223   0.336     
+    Pre(1)      +0.0000   0.0000   1.000     
+    Lag(0)      -2.9093   2.7343   0.287     
+    Lag(1)      -4.2762   3.2997   0.195     
+    Lag(2)      -3.9724   3.7754   0.293     
+    Lag(3)      -6.8461   4.3244   0.113     
+    Lag(4)      -5.1939   4.7683   0.276     
+    Lag(5)     -11.3345   5.7790   0.050   **
+    [N obs=281, 39 countries]
+
+    Sub-Saharan Africa (N treated=23)
+    Period         Coef       SE       p     
+    --------------------------------------
+    Pre(3)      -0.3642   1.0176   0.720     
+    Pre(2)      -1.3164   1.5426   0.393     
+    Pre(1)      +0.0000   0.0000   1.000     
+    Lag(0)      -0.8486   3.9383   0.829     
+    Lag(1)      -3.4597   5.0588   0.494     
+    Lag(2)      -5.2203   5.9778   0.383     
+    Lag(3)     -10.9267   7.3547   0.137     
+    Lag(4)     -11.7203   8.8441   0.185     
+    Lag(5)     -19.4003  10.5711   0.066    *
+    [N obs=142, 21 countries]
+
+  Tertiary Enrollment Gross
+
+    Full Panel (N treated=43)
+    Period         Coef       SE       p     
+    --------------------------------------
+    Pre(3)      +0.4504   1.0775   0.676     
+    Pre(2)      +1.4542   1.6413   0.376     
+    Pre(1)      +0.0000   0.0000   1.000     
+    Lag(0)      +1.5352   2.5434   0.546     
+    Lag(1)      +1.4787   2.7981   0.597     
+    Lag(2)      +1.3127   3.1056   0.673     
+    Lag(3)      +1.2592   3.4060   0.712     
+    Lag(4)      +0.8259   4.2646   0.846     
+    Lag(5)      +0.9584   4.7014   0.838     
+    [N obs=252, 35 countries]
+
+    Sub-Saharan Africa (N treated=23)
+    Period         Coef       SE       p     
+    --------------------------------------
+    Pre(3)      +0.7032   0.5819   0.227     
+    Pre(2)      +1.2182   0.9907   0.219     
+    Pre(1)      +0.0000   0.0000   1.000     
+    Lag(0)      +2.4587   1.8131   0.175     
+    Lag(1)      +3.1998   2.2824   0.161     
+    Lag(2)      +4.1328   3.0128   0.170     
+    Lag(3)      +6.0683   3.9846   0.128     
+    Lag(4)      +5.9235   4.8447   0.221     
+    Lag(5)      +7.4845   5.8897   0.204     
+    [N obs=128, 19 countries]
 
 
 Done.

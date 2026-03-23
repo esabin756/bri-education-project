@@ -25,6 +25,8 @@ def stars(p):
 # ── Key outcomes to test ──
 outcomes = [
     ('secondary_enroll_gross_pct', 'Secondary Enrollment Gross (%)'),
+    ('secondary_gross_female',     'Secondary Gross Female (%)'),
+    ('secondary_gross_male',       'Secondary Gross Male (%)'),
     ('tertiary_enroll_gross_pct',  'Tertiary Enrollment Gross (%)'),
     ('gdp_growth',                 'GDP Growth (%)'),
     ('female_emp_ratio',           'Female Employment Ratio (%)'),
@@ -74,7 +76,7 @@ def run_placebo_iter(df, outcome, seed):
 
     try:
         mod = smf.ols(
-            f'{outcome} ~ did_placebo + {controls} + '
+            f'Q("{outcome}") ~ did_placebo + {controls} + '
             f'C(year) + C(Q("Country Code"))',
             data=df
         ).fit(cov_type='cluster', cov_kwds={'groups': df['Country Code']})

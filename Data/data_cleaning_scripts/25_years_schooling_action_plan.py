@@ -3,6 +3,7 @@ import numpy as np
 import statsmodels.formula.api as smf
 import sys, os
 
+os.makedirs('Data/Regressions', exist_ok=True)
 log = open('Data/Regressions/years_schooling_action_plan_log.txt', 'w')
 _t = sys.stdout
 class Tee:
@@ -12,50 +13,53 @@ class Tee:
 sys.stdout = Tee(_t, log)
 
 panel = pd.read_csv('Data/Panel/panel_2023.csv')
-edyr  = pd.read_csv('Data/Raw_WBD/average_years_schooling.csv')
-edyr  = edyr.rename(columns={
-    'Code': 'Country Code', 'Year': 'year',
-    'Both genders': 'avg_years_schooling'
-})
-edyr  = edyr[edyr['Country Code'].notna()]
-edyr  = edyr[['Country Code','year','avg_years_schooling']]
-edyr  = edyr[edyr['year'].between(2000,2023)]
-panel = panel.merge(edyr, on=['Country Code','year'], how='left')
+
+# avg_years_schooling already in panel — no need to re-merge
+if 'avg_years_schooling' not in panel.columns:
+    edyr = pd.read_csv('Data/Raw_WBD/average_years_schooling.csv')
+    edyr = edyr.rename(columns={
+        'Code': 'Country Code', 'Year': 'year',
+        'Both genders': 'avg_years_schooling'
+    })
+    edyr = edyr[edyr['Country Code'].notna()][['Country Code','year','avg_years_schooling']]
+    edyr = edyr[edyr['year'].between(2000,2023)]
+    panel = panel.merge(edyr, on=['Country Code','year'], how='left')
 
 controls = ('log_gdp_pc_current_usd + population_total + '
             'percent_urban + birth_rate_crude_per_1000')
-ssa = panel[panel['Region']=='Sub-Saharan Africa'].copy()
+low_mid = ['Low income','Lower middle income','Upper middle income']
+ssa     = panel[panel['Region']=='Sub-Saharan Africa'].copy()
 
 def stars(p):
     return '***' if p<0.01 else '**' if p<0.05 else '*' if p<0.1 else ''
 
 print("="*65)
 print("  YEARS OF SCHOOLING — 2016 EDUCATION ACTION PLAN")
-print("  Did years of schooling improve in BRI countries after 2016?")
+print(f"  Panel: {panel['Country Code'].nunique()} countries, "
+      f"{panel['year'].min()}-{panel['year'].max()}")
+print(f"  Avg years schooling: {panel['avg_years_schooling'].notna().sum()} obs, "
+      f"{panel['avg_years_schooling'].isna().mean()*100:.1f}% missing")
 print("="*65)
 
-# ── Add post-2016 interaction ──
 for df in [panel, ssa]:
     df['post_2016']        = (df['year'] >= 2016).astype(int)
     df['treat_x_post2016'] = df['treat_500m'] * df['post_2016']
 
 subsets = [
-    (panel, 'Full Panel'),
-    (panel[panel['IncomeGroup'].isin(
-        ['Low income','Lower middle income','Upper middle income'])].copy(),
-     'Low & Middle Income'),
-    (ssa,   'Sub-Saharan Africa'),
+    (panel,                                             'Full Panel'),
+    (panel[panel['IncomeGroup'].isin(low_mid)].copy(),  'Low & Middle Income'),
+    (ssa,                                               'Sub-Saharan Africa'),
 ]
 
 # ================================================================
-# PART 1: POST-2016 INTERACTION
+# PART 1: POST-2016 INTERACTION — MULTIPLE CUTOFFS
 # ================================================================
 print(f"\n{'#'*65}")
-print(f"  PART 1: DID YEARS OF SCHOOLING CHANGE POST-2016")
-print(f"  Coef of interest: Treated x Post-2016")
+print(f"  PART 1: POST-2016 INTERACTION — CUTOFF SENSITIVITY")
+print(f"  Coefficient of interest: Treated x Post-Cutoff")
 print(f"{'#'*65}")
 
-for cutoff in [2016, 2017]:
+for cutoff in [2014, 2015, 2016, 2017]:
     print(f"\n  Cutoff year: {cutoff}")
     print(f"  {'Subset':<25} {'Coef':>8} {'SE':>8} {'p':>7} "
           f"{'N':>7} {'':>4}")
@@ -72,7 +76,7 @@ for cutoff in [2016, 2017]:
                                 if c in df.columns]).copy()
         try:
             mod = smf.ols(
-                f'avg_years_schooling ~ treat_x_post + treat_500m + '
+                'avg_years_schooling ~ treat_x_post + treat_500m + '
                 f'post_cut + {controls} + '
                 f'C(year) + C(Q("Country Code"))',
                 data=df
@@ -92,7 +96,6 @@ for cutoff in [2016, 2017]:
 # ================================================================
 print(f"\n\n{'#'*65}")
 print(f"  PART 2: SEPARATE DiD PRE vs POST 2016")
-print(f"  Did the treatment effect on years of schooling change?")
 print(f"{'#'*65}")
 
 for period_lbl, yr_min, yr_max in [
@@ -133,13 +136,11 @@ for period_lbl, yr_min, yr_max in [
 # ================================================================
 print(f"\n\n{'#'*65}")
 print(f"  PART 3: DYNAMIC DiD — POST-2016 EDUCATION INVESTMENT")
-print(f"  Does education investment after 2016 affect years of schooling?")
-print(f"  Expecting effects at Lag(5)+ given slow-moving stock variable")
+print(f"  Education investment after 2016 → years of schooling?")
 print(f"{'#'*65}")
 
 aid = pd.read_csv('Data/clean_aid_data/aiddata_clg_country_year.csv')
 
-# Build post-2016 education treatment
 aid_post2016 = aid[aid['year'] >= 2016].copy()
 edu_post2016 = (aid_post2016.sort_values(['Country Code','year'])
                 .assign(cumul=lambda x: x.groupby('Country Code')
@@ -148,10 +149,10 @@ crossed = (edu_post2016[edu_post2016['cumul'] >= 10e6]
            .groupby('Country Code')['year'].min().reset_index()
            .rename(columns={'year': 'treat_year_post2016'}))
 
-for df in [panel, ssa]:
-    df.drop(columns=[c for c in df.columns
-                     if 'treat_year_post2016' in c], errors='ignore',
-            inplace=True)
+panel = panel.drop(columns=[c for c in panel.columns
+                              if 'treat_year_post2016' in c], errors='ignore')
+ssa   = ssa.drop(columns=[c for c in ssa.columns
+                            if 'treat_year_post2016' in c], errors='ignore')
 
 panel = panel.merge(crossed, on='Country Code', how='left')
 ssa   = ssa.merge(crossed,   on='Country Code', how='left')
@@ -177,7 +178,7 @@ def run_dynamic_post2016(df, outcome):
         [f'lag{l}' for l in range(6)] + ['pre1','pre2','pre3']
     )
     mod = smf.ols(
-        f'{outcome} ~ {lag_terms} + {controls} + '
+        f'Q("{outcome}") ~ {lag_terms} + {controls} + '
         f'C(year) + C(Q("Country Code"))',
         data=df
     ).fit(cov_type='cluster',
@@ -196,26 +197,32 @@ def run_dynamic_post2016(df, outcome):
         })
     return pd.DataFrame(rows), int(mod.nobs), df['Country Code'].nunique()
 
-for sdf, slbl in [(panel,'Full Panel'),(ssa,'Sub-Saharan Africa')]:
-    n_t = sdf[sdf['treat_post2016']==1]['Country Code'].nunique()
-    print(f"\n  {slbl} (N treated={n_t})")
-    print(f"  {'Period':<10} {'Coef':>8} {'SE':>8} {'p':>7} {'':>4}")
-    print(f"  {'-'*38}")
-    try:
-        dyn, nobs, nc = run_dynamic_post2016(sdf, 'avg_years_schooling')
-        for _, row in dyn.iterrows():
-            pp  = int(row['period'])
-            lbl = f"Pre({abs(pp)})" if pp < 0 else f"Lag({pp})"
-            sig = stars(row['p'])
-            marker = ' <- expect effect here' if pp == 5 else ''
-            print(f"  {lbl:<10} {row['coef']:>+8.4f} "
-                  f"{row['se']:>8.4f} {row['p']:>7.3f} "
-                  f"{sig:>4}{marker}")
-        print(f"  [N obs={nobs}, {nc} countries]")
-    except Exception as e:
-        print(f"  ERROR: {e}")
+# Run for both avg years and enrollment outcomes
+dynamic_outcomes = [
+    ('avg_years_schooling',        'Avg Years of Schooling'),
+    ('secondary_enroll_gross_pct', 'Secondary Enrollment Gross'),
+    ('tertiary_enroll_gross_pct',  'Tertiary Enrollment Gross'),
+]
+
+for ocol, olbl in dynamic_outcomes:
+    print(f"\n  {olbl}")
+    for sdf, slbl in [(panel,'Full Panel'),(ssa,'Sub-Saharan Africa')]:
+        n_t = sdf[sdf['treat_post2016']==1]['Country Code'].nunique()
+        print(f"\n    {slbl} (N treated={n_t})")
+        print(f"    {'Period':<10} {'Coef':>8} {'SE':>8} {'p':>7} {'':>4}")
+        print(f"    {'-'*38}")
+        try:
+            dyn, nobs, nc = run_dynamic_post2016(sdf, ocol)
+            for _, row in dyn.iterrows():
+                pp  = int(row['period'])
+                lbl = f"Pre({abs(pp)})" if pp < 0 else f"Lag({pp})"
+                sig = stars(row['p'])
+                print(f"    {lbl:<10} {row['coef']:>+8.4f} "
+                      f"{row['se']:>8.4f} {row['p']:>7.3f} {sig:>4}")
+            print(f"    [N obs={nobs}, {nc} countries]")
+        except Exception as e:
+            print(f"    ERROR: {e}")
 
 print("\n\nDone.")
-# restore stdout before closing the log to avoid EOF flush error
 sys.stdout = _t
 log.close()

@@ -42,7 +42,6 @@ lm   = panel[panel['IncomeGroup'].isin(low_mid)].copy()
 ssa  = panel[panel['Region']=='Sub-Saharan Africa'].copy()
 
 outcomes = [
-    # Education — gross total
     ('primary_enroll_gross_pct',     'Primary Enrollment Gross (%)'),
     ('primary_gross_female',         'Primary Gross — Female (%)'),
     ('primary_gross_male',           'Primary Gross — Male (%)'),
@@ -54,15 +53,12 @@ outcomes = [
     ('tertiary_enroll_gross_pct',    'Tertiary Enrollment Gross (%)'),
     ('tertiary_gross_female_y',      'Tertiary Gross — Female (%)'),
     ('tertiary_gross_male_y',        'Tertiary Gross — Male (%)'),
-    ('tertiary_gender_gap_gross', 'Tertiary Gender Gap Gross (F-M, pp)'),
-    # Human capital stock
+    ('tertiary_gender_gap_gross',    'Tertiary Gender Gap Gross (F-M, pp)'),
     ('avg_years_schooling',          'Avg Years of Schooling (adults)'),
-    # Employment
     ('female_emp_ratio',             'Female Employment Ratio (%)'),
     ('youth_emp_ratio',              'Youth Employment Ratio (%)'),
     ('unemployment_pct',             'Unemployment Rate (%)'),
     ('industry_emp_pct',             'Industry Employment (%)'),
-    # Income
     ('gdp_growth',                   'GDP Growth (%)'),
     ('gni_per_capita',               'GNI per Capita (USD)'),
 ]
@@ -91,7 +87,7 @@ def run_dynamic(df, outcome):
                             'percent_urban','birth_rate_crude_per_1000']).copy()
     df['rel_time'] = df['year'] - df['treat_year']
 
-    for l in range(7):
+    for l in range(11):  # lag0 through lag10
         df[f'lag{l}'] = ((df['treat_500m']==1) &
                           (df['rel_time']==l)).astype(float)
     for p in [1,2,3,4]:
@@ -99,7 +95,7 @@ def run_dynamic(df, outcome):
                           (df['rel_time']==-p)).astype(float)
 
     lag_terms = ' + '.join(
-        [f'lag{l}' for l in range(7)] + ['pre1','pre2','pre3','pre4']
+        [f'lag{l}' for l in range(11)] + ['pre1','pre2','pre3','pre4']
     )
     mod = smf.ols(
         f'Q("{outcome}") ~ {lag_terms} + {controls} + '
@@ -110,7 +106,8 @@ def run_dynamic(df, outcome):
     results = []
     for pp, col in [(-4,'pre4'),(-3,'pre3'),(-2,'pre2'),(-1,'pre1'),
                     (0,'lag0'),(1,'lag1'),(2,'lag2'),(3,'lag3'),
-                    (4,'lag4'),(5,'lag5'),(6,'lag6')]:
+                    (4,'lag4'),(5,'lag5'),(6,'lag6'),(7,'lag7'),
+                    (8,'lag8'),(9,'lag9'),(10,'lag10')]:
         results.append({
             'period': pp,
             'coef':   mod.params[col],
@@ -162,14 +159,13 @@ for ocol, olbl in outcomes:
             print(f"  {slbl:<25} ERROR: {e}")
 
 # ================================================================
-# PART 2: DYNAMIC DiD
+# PART 2: DYNAMIC DiD — KEY OUTCOMES
 # ================================================================
 print("\n\n" + "#"*65)
 print("  PART 2: DYNAMIC DiD — KEY OUTCOMES")
 print("#"*65)
 
 key_outcomes = [
-    # Primary — full panel and SSA, total + female + male + gap
     ('primary_enroll_gross_pct',     'Primary Enrollment Gross',   full, 'Full Panel'),
     ('primary_enroll_gross_pct',     'Primary Enrollment Gross',   ssa,  'Sub-Saharan Africa'),
     ('primary_gross_female',         'Primary Gross Female',       full, 'Full Panel'),
@@ -178,7 +174,6 @@ key_outcomes = [
     ('primary_gross_male',           'Primary Gross Male',         ssa,  'Sub-Saharan Africa'),
     ('primary_gender_gap_gross',     'Primary Gender Gap Gross',   full, 'Full Panel'),
     ('primary_gender_gap_gross',     'Primary Gender Gap Gross',   ssa,  'Sub-Saharan Africa'),
-    # Secondary — full panel and SSA, total + female + male + gap
     ('secondary_enroll_gross_pct',   'Secondary Enrollment Gross', full, 'Full Panel'),
     ('secondary_enroll_gross_pct',   'Secondary Enrollment Gross', ssa,  'Sub-Saharan Africa'),
     ('secondary_gross_female',       'Secondary Gross Female',     full, 'Full Panel'),
@@ -187,7 +182,6 @@ key_outcomes = [
     ('secondary_gross_male',         'Secondary Gross Male',       ssa,  'Sub-Saharan Africa'),
     ('secondary_gender_gap_gross',   'Secondary Gender Gap Gross', full, 'Full Panel'),
     ('secondary_gender_gap_gross',   'Secondary Gender Gap Gross', ssa,  'Sub-Saharan Africa'),
-    # Tertiary — full panel and SSA, total + female + male + gap
     ('tertiary_enroll_gross_pct',    'Tertiary Enrollment Gross',  full, 'Full Panel'),
     ('tertiary_enroll_gross_pct',    'Tertiary Enrollment Gross',  ssa,  'Sub-Saharan Africa'),
     ('tertiary_gross_female_y',      'Tertiary Gross Female',      full, 'Full Panel'),
@@ -196,15 +190,54 @@ key_outcomes = [
     ('tertiary_gross_male_y',        'Tertiary Gross Male',        ssa,  'Sub-Saharan Africa'),
     ('tertiary_gender_gap_gross',    'Tertiary Gender Gap Gross',  full, 'Full Panel'),
     ('tertiary_gender_gap_gross',    'Tertiary Gender Gap Gross',  ssa,  'Sub-Saharan Africa'),
-    # Human capital stock
     ('avg_years_schooling',          'Avg Years of Schooling',     full, 'Full Panel'),
     ('avg_years_schooling',          'Avg Years of Schooling',     ssa,  'Sub-Saharan Africa'),
-    # Employment and income
     ('female_emp_ratio',             'Female Employment',          full, 'Full Panel'),
     ('gdp_growth',                   'GDP Growth',                 ssa,  'Sub-Saharan Africa'),
 ]
 
 for ocol, olbl, sdf, slbl in key_outcomes:
+    print(f"\n  {olbl} — {slbl}")
+    print(f"  {'Period':<10} {'Coef':>8} {'SE':>8} {'p':>7} {'':>4}")
+    print(f"  {'-'*38}")
+    try:
+        dyn = run_dynamic(sdf, ocol)
+        for _, row in dyn.iterrows():
+            lbl = (f"Pre({abs(int(row['period']))})"
+                   if row['period'] < 0
+                   else f"Lag({int(row['period'])})")
+            sig = stars(row['p'])
+            print(f"  {lbl:<10} {row['coef']:>+8.3f} "
+                  f"{row['se']:>8.3f} {row['p']:>7.3f} {sig:>4}")
+    except Exception as e:
+        print(f"  ERROR: {e}")
+
+# ================================================================
+# PART 2B: DYNAMIC DiD — LOW & MIDDLE INCOME
+# ================================================================
+print("\n\n" + "#"*65)
+print("  PART 2B: DYNAMIC DiD — LOW & MIDDLE INCOME COUNTRIES")
+print("#"*65)
+
+lm_key_outcomes = [
+    ('primary_enroll_gross_pct',     'Primary Enrollment Gross',   lm, 'Low & Middle Income'),
+    ('primary_gross_female',         'Primary Gross Female',       lm, 'Low & Middle Income'),
+    ('primary_gross_male',           'Primary Gross Male',         lm, 'Low & Middle Income'),
+    ('primary_gender_gap_gross',     'Primary Gender Gap Gross',   lm, 'Low & Middle Income'),
+    ('secondary_enroll_gross_pct',   'Secondary Enrollment Gross', lm, 'Low & Middle Income'),
+    ('secondary_gross_female',       'Secondary Gross Female',     lm, 'Low & Middle Income'),
+    ('secondary_gross_male',         'Secondary Gross Male',       lm, 'Low & Middle Income'),
+    ('secondary_gender_gap_gross',   'Secondary Gender Gap Gross', lm, 'Low & Middle Income'),
+    ('tertiary_enroll_gross_pct',    'Tertiary Enrollment Gross',  lm, 'Low & Middle Income'),
+    ('tertiary_gross_female_y',      'Tertiary Gross Female',      lm, 'Low & Middle Income'),
+    ('tertiary_gross_male_y',        'Tertiary Gross Male',        lm, 'Low & Middle Income'),
+    ('tertiary_gender_gap_gross',    'Tertiary Gender Gap Gross',  lm, 'Low & Middle Income'),
+    ('avg_years_schooling',          'Avg Years of Schooling',     lm, 'Low & Middle Income'),
+    ('female_emp_ratio',             'Female Employment',          lm, 'Low & Middle Income'),
+    ('gdp_growth',                   'GDP Growth',                 lm, 'Low & Middle Income'),
+]
+
+for ocol, olbl, sdf, slbl in lm_key_outcomes:
     print(f"\n  {olbl} — {slbl}")
     print(f"  {'Period':<10} {'Coef':>8} {'SE':>8} {'p':>7} {'':>4}")
     print(f"  {'-'*38}")
@@ -276,6 +309,9 @@ sector_outcomes = [
     ('secondary_gross_female',     'Secondary Gross Female'),
     ('secondary_gross_male',       'Secondary Gross Male'),
     ('secondary_gender_gap_gross', 'Secondary Gender Gap Gross'),
+    ('tertiary_enroll_gross_pct',  'Tertiary Enrollment Gross'),
+    ('tertiary_gross_female_y',    'Tertiary Gross Female'),
+    ('tertiary_gross_male_y',      'Tertiary Gross Male'),
     ('avg_years_schooling',        'Avg Years of Schooling'),
     ('female_emp_ratio',           'Female Employment'),
     ('gdp_growth',                 'GDP Growth'),

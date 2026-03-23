@@ -1,6 +1,7 @@
 =================================================================
   USAID vs CHINA — PSM DiD COMPARISON
   Panel: 205 countries
+  Writing results to: Data/Regressions/27_usaid_psm_did_results.txt
 =================================================================
 
 USAID treated ($10M+): 90

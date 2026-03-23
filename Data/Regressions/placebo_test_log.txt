@@ -12,11 +12,11 @@
 
   Secondary Enrollment Gross (%) — Full Panel
   Valid iterations:     500
-  Mean placebo coef:    +0.049
-  Std placebo coef:     0.790
-  95th pctile |coef|:   1.472
-  % significant (p<.05): 5.4%
-  % positive coef:      53.4%
+  Mean placebo coef:    +0.076
+  Std placebo coef:     1.242
+  95th pctile |coef|:   2.539
+  % significant (p<.05): 6.0%
+  % positive coef:      52.0%
 
   Secondary Enrollment Gross (%) — Sub-Saharan Africa
   Valid iterations:     500
@@ -26,24 +26,56 @@
   % significant (p<.05): 11.4%
   % positive coef:      50.8%
 
+  Secondary Gross Female (%) — Full Panel
+  Valid iterations:     500
+  Mean placebo coef:    +0.090
+  Std placebo coef:     1.362
+  95th pctile |coef|:   2.721
+  % significant (p<.05): 5.0%
+  % positive coef:      54.0%
+
+  Secondary Gross Female (%) — Sub-Saharan Africa
+  Valid iterations:     500
+  Mean placebo coef:    -0.100
+  Std placebo coef:     4.795
+  95th pctile |coef|:   9.312
+  % significant (p<.05): 12.8%
+  % positive coef:      49.4%
+
+  Secondary Gross Male (%) — Full Panel
+  Valid iterations:     500
+  Mean placebo coef:    +0.074
+  Std placebo coef:     1.222
+  95th pctile |coef|:   2.512
+  % significant (p<.05): 6.2%
+  % positive coef:      52.8%
+
+  Secondary Gross Male (%) — Sub-Saharan Africa
+  Valid iterations:     500
+  Mean placebo coef:    +0.019
+  Std placebo coef:     3.574
+  95th pctile |coef|:   7.051
+  % significant (p<.05): 8.6%
+  % positive coef:      50.4%
+
   Tertiary Enrollment Gross (%) — Full Panel
   Valid iterations:     500
-  Mean placebo coef:    -0.006
-  Std placebo coef:     1.056
-  95th pctile |coef|:   2.087
+  Mean placebo coef:    -0.054
+  Std placebo coef:     1.667
+  95th pctile |coef|:   3.358
   % significant (p<.05): 5.2%
-  % positive coef:      50.0%
+  % positive coef:      47.0%
 
   Tertiary Enrollment Gross (%) — Sub-Saharan Africa
   No valid iterations
 
   GDP Growth (%) — Full Panel
   Valid iterations:     500
-  Mean placebo coef:    -0.028
-  Std placebo coef:     0.319
-  95th pctile |coef|:   0.595
-  % significant (p<.05): 2.8%
-  % positive coef:      45.4%
+  Mean placebo coef:    -0.004
+  Std placebo coef:     0.497
+  95th pctile |coef|:   1.033
+  % significant (p<.05): 5.4%
+  % positive coef:      51.4%
 
   GDP Growth (%) — Sub-Saharan Africa
   Valid iterations:     500
@@ -55,11 +87,11 @@
 
   Female Employment Ratio (%) — Full Panel
   Valid iterations:     500
-  Mean placebo coef:    -0.006
-  Std placebo coef:     0.324
-  95th pctile |coef|:   0.642
-  % significant (p<.05): 5.8%
-  % positive coef:      47.2%
+  Mean placebo coef:    +0.028
+  Std placebo coef:     0.499
+  95th pctile |coef|:   0.976
+  % significant (p<.05): 6.0%
+  % positive coef:      51.4%
 
   Female Employment Ratio (%) — Sub-Saharan Africa
   Valid iterations:     500
@@ -76,12 +108,16 @@
 
   Outcome                             Subset                      Actual       p  Placebo mean  Placebo SD  Rank pct
   --------------------------------------------------------------------------------------------------------------
-  Secondary Enrollment Gross (%)      Full Panel                  +0.901   0.474        +0.049       0.790     87.6%
+  Secondary Enrollment Gross (%)      Full Panel                  +0.520   0.697        +0.076       1.242     65.2%
   Secondary Enrollment Gross (%)      Sub-Saharan Africa          -3.223   0.053        -0.095       3.837     20.8%
-  Tertiary Enrollment Gross (%)       Full Panel                  -0.523   0.695        -0.006       1.056     29.6%
-  GDP Growth (%)                      Full Panel                  +0.021   0.961        -0.028       0.319     55.6%
+  Secondary Gross Female (%)          Full Panel                  +1.116   0.435        +0.090       1.362     79.0%
+  Secondary Gross Female (%)          Sub-Saharan Africa          -3.745   0.026        -0.100       4.795     23.6%
+  Secondary Gross Male (%)            Full Panel                  -0.109   0.936        +0.074       1.222     44.0%
+  Secondary Gross Male (%)            Sub-Saharan Africa          -2.889   0.106        +0.019       3.574     21.8%
+  Tertiary Enrollment Gross (%)       Full Panel                  -0.923   0.508        -0.054       1.667     31.6%
+  GDP Growth (%)                      Full Panel                  -0.002   0.997        -0.004       0.497     48.6%
   GDP Growth (%)                      Sub-Saharan Africa          +1.049   0.151        +0.095       1.330     77.2%
-  Female Employment Ratio (%)         Full Panel                  -1.124   0.063        -0.006       0.324      0.0%
+  Female Employment Ratio (%)         Full Panel                  -1.406   0.023        +0.028       0.499      0.2%
   Female Employment Ratio (%)         Sub-Saharan Africa          -0.369   0.734        +0.008       1.563     40.2%
 
 
@@ -90,9 +126,9 @@
 #################################################################
 
   Secondary Enrollment Gross — Full Panel
-  Mean placebo coef:     +0.020
-  Std placebo coef:      0.693
-  % significant (p<.05): 3.6%
+  Mean placebo coef:     +0.000
+  Std placebo coef:      1.092
+  % significant (p<.05): 5.2%
 
   Secondary Enrollment Gross — Sub-Saharan Africa
   Mean placebo coef:     +0.011
@@ -100,9 +136,9 @@
   % significant (p<.05): 21.4%
 
   Tertiary Enrollment Gross — Full Panel
-  Mean placebo coef:     -0.018
-  Std placebo coef:      1.030
-  % significant (p<.05): 5.0%
+  Mean placebo coef:     -0.002
+  Std placebo coef:      1.591
+  % significant (p<.05): 6.6%
 
   Tertiary Enrollment Gross — Sub-Saharan Africa
 

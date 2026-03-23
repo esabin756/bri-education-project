@@ -1,0 +1,112 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
+import os
+
+print("Loading CLG Global data...")
+df = pd.read_excel('Data/BRI_Data/AidDatas_CLG_Global_Dataset_v1.0.xlsx',
+                   sheet_name='CLG-Global 1.0_Records')
+
+print(f"Total records: {len(df)}")
+print(f"Recommended for aggregates: {df['Recommended_for_Aggregates'].value_counts().to_dict()}")
+
+df_rec = df[df['Recommended_for_Aggregates']=='Yes'].copy()
+print(f"Records after filter: {len(df_rec)}")
+
+# ── Sector mapping ──
+sectors_to_extract = {
+    'TRANSPORT AND STORAGE':          'Transport',
+    'ENERGY':                         'Energy',
+    'INDUSTRY, MINING, CONSTRUCTION': 'Industry',
+    'BANKING AND FINANCIAL SERVICES': 'Finance',
+    'COMMUNICATIONS':                 'Communications',
+    'AGRICULTURE, FORESTRY, FISHING': 'Agriculture',
+    'GOVERNMENT AND CIVIL SOCIETY':   'Government',
+    'HEALTH':                         'Health',
+    'EDUCATION':                      'Education',
+}
+
+df_rec['sector_group'] = df_rec['Sector_Name'].map(sectors_to_extract).fillna('Other')
+
+# ── Aggregate by year ──
+annual = (df_rec.groupby(['Commitment_Year','sector_group'])['Amount_Constant_USD_2023']
+          .sum().reset_index())
+annual = annual.rename(columns={'Commitment_Year':'year',
+                                'Amount_Constant_USD_2023':'usd'})
+annual['usd_B'] = annual['usd'] / 1e9
+
+pivot = annual.pivot(index='year', columns='sector_group', values='usd_B').fillna(0)
+pivot.index = pivot.index.astype(int)
+pivot = pivot[(pivot.index >= 2000) & (pivot.index <= 2023)]
+
+print("\nSector totals (billions):")
+print(pivot.sum().sort_values(ascending=False).round(1))
+print(f"\nPeak year total: ${pivot.sum(axis=1).max():.1f}B "
+      f"({pivot.sum(axis=1).idxmax()})")
+
+# ── Sector order (largest at bottom) and colors ──
+sector_order = [
+    ('Industry',        '#455A64'),
+    ('Finance',         '#90A4AE'),
+    ('Energy',          '#FF9800'),
+    ('Transport',       '#2196F3'),
+    ('Other',           '#CFD8DC'),
+    ('Communications',  '#26C6DA'),
+    ('Agriculture',     '#66BB6A'),
+    ('Government',      '#CE93D8'),
+    ('Health',          '#EF5350'),
+    ('Education',       '#7B1FA2'),
+]
+
+# Keep only sectors that exist
+sector_order = [(s, c) for s, c in sector_order if s in pivot.columns]
+
+years  = pivot.index.values
+data   = [pivot[s].values for s, _ in sector_order]
+labels = [s for s, _ in sector_order]
+colors = [c for _, c in sector_order]
+
+# ── Plot ──
+fig, ax = plt.subplots(figsize=(13, 7))
+ax.stackplot(years, data, labels=labels, colors=colors, alpha=0.88)
+
+# ── 2016 Action Plan line ──
+total_by_year = pivot.sum(axis=1)
+ymax = total_by_year.max()
+ax.axvline(x=2016, color='black', linestyle='--', linewidth=1.5, alpha=0.8)
+ax.text(2016.3, ymax * 0.72,
+        '2016 Education\nAction Plan',
+        fontsize=9, color='black', va='center',
+        bbox=dict(boxstyle='round,pad=0.3', facecolor='white',
+                  edgecolor='gray', alpha=0.8))
+
+# ── Formatting ──
+ax.set_xlabel('Year', fontsize=13)
+ax.set_ylabel('Commitments (USD Billions, constant 2023)', fontsize=12)
+ax.set_title('Chinese BRI Investment by Sector, 2000–2023',
+             fontsize=14, fontweight='bold', pad=15)
+ax.set_xlim(2000, 2023)
+ax.set_xticks(range(2000, 2024, 2))
+ax.yaxis.set_major_formatter(
+    mticker.FuncFormatter(lambda x, _: f'${x:.0f}B'))
+
+# Legend — reverse order so top of stack = top of legend
+handles, leg_labels = ax.get_legend_handles_labels()
+ax.legend(handles[::-1], leg_labels[::-1],
+          loc='upper left', framealpha=0.9,
+          fontsize=10, title='Sector',
+          title_fontsize=10, ncol=2)
+
+ax.grid(axis='y', alpha=0.3, linestyle='--')
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+
+plt.tight_layout()
+os.makedirs('Data/Figures', exist_ok=True)
+plt.savefig('Data/Figures/bri_investment_by_sector.png',
+            dpi=300, bbox_inches='tight')
+plt.savefig('Data/Figures/bri_investment_by_sector.pdf',
+            bbox_inches='tight')
+print("\nSaved: Data/Figures/bri_investment_by_sector.png")
+plt.close()

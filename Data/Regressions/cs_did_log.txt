@@ -7,55 +7,208 @@
   Full Panel — Primary Enrollment (%)
   N countries=247, N obs=4642
 ============================================================
-  ERROR: Unable to evaluate factor `sunab(g, year)`. [NameError: name 'sunab' is not defined]
+                                                     Estimate  ...      97.5%
+Coefficient                                                    ...           
+C(rel_time, contr.treatment(base=-1.0))[0.0]:co... -15.962484  ... -13.483751
+C(rel_time, contr.treatment(base=-1.0))[1.0]:co... -18.176116  ... -15.724005
+C(rel_time, contr.treatment(base=-1.0))[2.0]:co... -18.295974  ... -15.949018
+C(rel_time, contr.treatment(base=-1.0))[3.0]:co... -16.850253  ... -14.725108
+C(rel_time, contr.treatment(base=-1.0))[4.0]:co... -14.516370  ... -11.575301
+...                                                       ...  ...        ...
+C(rel_time, contr.treatment(base=-1.0))[-4.0]:c...   1.034574  ...  20.121797
+C(rel_time, contr.treatment(base=-1.0))[-3.0]:c...   1.707113  ...  21.199124
+C(rel_time, contr.treatment(base=-1.0))[-2.0]:c...  -2.749160  ...  15.548099
+C(rel_time, contr.treatment(base=-1.0))[0.0]:co...   0.620523  ...   7.103320
+C(rel_time, contr.treatment(base=-1.0))[1.0]:co...  -0.884658  ...   6.359588
+
+[416 rows x 6 columns]
+
+  Sun & Abraham ATT decomposition printed above.
+  Look for ATT-related rows and event-time coefficients.
 
 ============================================================
   Full Panel — Secondary Enrollment (%)
   N countries=245, N obs=4178
 ============================================================
-  ERROR: Unable to evaluate factor `sunab(g, year)`. [NameError: name 'sunab' is not defined]
+                                                     Estimate  ...      97.5%
+Coefficient                                                    ...           
+C(rel_time, contr.treatment(base=-1.0))[0.0]:co... -22.051100  ... -19.844653
+C(rel_time, contr.treatment(base=-1.0))[1.0]:co... -22.462791  ... -20.295552
+C(rel_time, contr.treatment(base=-1.0))[2.0]:co... -22.340740  ... -20.337277
+C(rel_time, contr.treatment(base=-1.0))[3.0]:co... -22.923099  ... -20.916297
+C(rel_time, contr.treatment(base=-1.0))[4.0]:co... -19.816897  ... -17.843927
+...                                                       ...  ...        ...
+C(rel_time, contr.treatment(base=-1.0))[-17.0]:...  19.951315  ...  21.962176
+C(rel_time, contr.treatment(base=-1.0))[-16.0]:...  20.299859  ...  22.319300
+C(rel_time, contr.treatment(base=-1.0))[-15.0]:...  21.484261  ...  23.454839
+C(rel_time, contr.treatment(base=-1.0))[-14.0]:...  21.179122  ...  23.131491
+C(rel_time, contr.treatment(base=-1.0))[-13.0]:...  15.550796  ...  17.615718
+
+[397 rows x 6 columns]
+
+  Sun & Abraham ATT decomposition printed above.
+  Look for ATT-related rows and event-time coefficients.
 
 ============================================================
   Full Panel — Tertiary Enrollment (%)
   N countries=237, N obs=3821
 ============================================================
-  ERROR: Unable to evaluate factor `sunab(g, year)`. [NameError: name 'sunab' is not defined]
+                                                    Estimate  ...      97.5%
+Coefficient                                                   ...           
+C(rel_time, contr.treatment(base=-1.0))[0.0]:co...  8.316526  ...  10.700117
+C(rel_time, contr.treatment(base=-1.0))[1.0]:co...  9.033634  ...  11.389650
+C(rel_time, contr.treatment(base=-1.0))[2.0]:co...  8.167716  ...  10.440685
+C(rel_time, contr.treatment(base=-1.0))[3.0]:co...  6.074211  ...   8.328959
+C(rel_time, contr.treatment(base=-1.0))[4.0]:co...  6.426253  ...   8.647784
+...                                                      ...  ...        ...
+C(rel_time, contr.treatment(base=-1.0))[-8.0]:c...  1.099298  ...   3.516838
+C(rel_time, contr.treatment(base=-1.0))[-6.0]:c... -0.252798  ...   1.686668
+C(rel_time, contr.treatment(base=-1.0))[-5.0]:c...  1.916794  ...   3.741216
+C(rel_time, contr.treatment(base=-1.0))[-4.0]:c...  1.886050  ...   3.370048
+C(rel_time, contr.treatment(base=-1.0))[0.0]:co... -5.421422  ...  -4.792850
+
+[413 rows x 6 columns]
+
+  Sun & Abraham ATT decomposition printed above.
+  Look for ATT-related rows and event-time coefficients.
 
 ============================================================
   Low & Middle Income — Primary Enrollment (%)
   N countries=126, N obs=2257
 ============================================================
-  ERROR: Unable to evaluate factor `sunab(g, year)`. [NameError: name 'sunab' is not defined]
+                                                     Estimate  ...      97.5%
+Coefficient                                                    ...           
+C(rel_time, contr.treatment(base=-1.0))[0.0]:co... -15.160373  ...  -7.115702
+C(rel_time, contr.treatment(base=-1.0))[1.0]:co... -19.680967  ... -11.625848
+C(rel_time, contr.treatment(base=-1.0))[2.0]:co... -19.396018  ... -12.048992
+C(rel_time, contr.treatment(base=-1.0))[3.0]:co... -18.805471  ... -11.734644
+C(rel_time, contr.treatment(base=-1.0))[4.0]:co... -16.402627  ...  -9.522355
+...                                                       ...  ...        ...
+C(rel_time, contr.treatment(base=-1.0))[-4.0]:c...  -0.235940  ...  20.121335
+C(rel_time, contr.treatment(base=-1.0))[-3.0]:c...   0.890220  ...  21.542519
+C(rel_time, contr.treatment(base=-1.0))[-2.0]:c...  -3.638583  ...  15.724708
+C(rel_time, contr.treatment(base=-1.0))[0.0]:co...   1.598198  ...   8.742311
+C(rel_time, contr.treatment(base=-1.0))[1.0]:co...   0.479921  ...   8.782888
+
+[376 rows x 6 columns]
+
+  Sun & Abraham ATT decomposition printed above.
+  Look for ATT-related rows and event-time coefficients.
 
 ============================================================
   Low & Middle Income — Secondary Enrollment (%)
   N countries=124, N obs=1854
 ============================================================
-  ERROR: Unable to evaluate factor `sunab(g, year)`. [NameError: name 'sunab' is not defined]
+                                                     Estimate  ...      97.5%
+Coefficient                                                    ...           
+C(rel_time, contr.treatment(base=-1.0))[0.0]:co... -15.495528  ...  -8.069134
+C(rel_time, contr.treatment(base=-1.0))[1.0]:co... -16.973704  ...  -9.666216
+C(rel_time, contr.treatment(base=-1.0))[2.0]:co... -18.149659  ... -11.459923
+C(rel_time, contr.treatment(base=-1.0))[3.0]:co... -19.113830  ... -11.860538
+C(rel_time, contr.treatment(base=-1.0))[4.0]:co... -18.117787  ... -11.841755
+...                                                       ...  ...        ...
+C(rel_time, contr.treatment(base=-1.0))[-17.0]:...  21.830820  ...  29.565385
+C(rel_time, contr.treatment(base=-1.0))[-16.0]:...  23.189110  ...  31.316048
+C(rel_time, contr.treatment(base=-1.0))[-15.0]:...  22.538587  ...  30.565549
+C(rel_time, contr.treatment(base=-1.0))[-14.0]:...  21.306787  ...  29.288387
+C(rel_time, contr.treatment(base=-1.0))[-13.0]:...  15.671533  ...  24.074494
+
+[373 rows x 6 columns]
+
+  Sun & Abraham ATT decomposition printed above.
+  Look for ATT-related rows and event-time coefficients.
 
 ============================================================
   Low & Middle Income — Tertiary Enrollment (%)
   N countries=118, N obs=1660
 ============================================================
-  ERROR: Unable to evaluate factor `sunab(g, year)`. [NameError: name 'sunab' is not defined]
+                                                    Estimate  ...      97.5%
+Coefficient                                                   ...           
+C(rel_time, contr.treatment(base=-1.0))[0.0]:co...  5.552448  ...  11.430120
+C(rel_time, contr.treatment(base=-1.0))[1.0]:co...  8.175979  ...  14.215558
+C(rel_time, contr.treatment(base=-1.0))[2.0]:co...  8.195621  ...  14.567232
+C(rel_time, contr.treatment(base=-1.0))[3.0]:co...  7.341055  ...  13.496055
+C(rel_time, contr.treatment(base=-1.0))[4.0]:co...  7.474907  ...  13.628848
+...                                                      ...  ...        ...
+C(rel_time, contr.treatment(base=-1.0))[-3.0]:c...  1.370303  ...   3.257260
+C(rel_time, contr.treatment(base=-1.0))[-2.0]:c...  0.096708  ...   1.459848
+C(rel_time, contr.treatment(base=-1.0))[0.0]:co... -1.735338  ...   1.577283
+C(rel_time, contr.treatment(base=-1.0))[1.0]:co... -2.371348  ...   1.753430
+C(rel_time, contr.treatment(base=-1.0))[2.0]:co... -2.250157  ...   2.318987
+
+[380 rows x 6 columns]
+
+  Sun & Abraham ATT decomposition printed above.
+  Look for ATT-related rows and event-time coefficients.
 
 ============================================================
   Sub-Saharan Africa — Primary Enrollment (%)
   N countries=48, N obs=814
 ============================================================
-  ERROR: Unable to evaluate factor `sunab(g, year)`. [NameError: name 'sunab' is not defined]
+                                                     Estimate  ...      97.5%
+Coefficient                                                    ...           
+C(rel_time, contr.treatment(base=-1.0))[0.0]:co...   4.848713  ...  21.292623
+C(rel_time, contr.treatment(base=-1.0))[1.0]:co...   1.242836  ...  16.290276
+C(rel_time, contr.treatment(base=-1.0))[2.0]:co...   1.632601  ...  15.811900
+C(rel_time, contr.treatment(base=-1.0))[3.0]:co...   2.439392  ...  15.786906
+C(rel_time, contr.treatment(base=-1.0))[4.0]:co...   0.887563  ...  14.187900
+...                                                       ...  ...        ...
+C(rel_time, contr.treatment(base=-1.0))[-4.0]:c...  11.935318  ...  21.885668
+C(rel_time, contr.treatment(base=-1.0))[-3.0]:c...  15.064241  ...  22.427578
+C(rel_time, contr.treatment(base=-1.0))[-2.0]:c...   4.441282  ...   7.794223
+C(rel_time, contr.treatment(base=-1.0))[0.0]:co...  -1.955133  ...   1.374548
+C(rel_time, contr.treatment(base=-1.0))[1.0]:co...  -0.656279  ...  11.290955
+
+[258 rows x 6 columns]
+
+  Sun & Abraham ATT decomposition printed above.
+  Look for ATT-related rows and event-time coefficients.
 
 ============================================================
   Sub-Saharan Africa — Secondary Enrollment (%)
   N countries=47, N obs=609
 ============================================================
-  ERROR: Unable to evaluate factor `sunab(g, year)`. [NameError: name 'sunab' is not defined]
+                                                     Estimate  ...      97.5%
+Coefficient                                                    ...           
+C(rel_time, contr.treatment(base=-1.0))[0.0]:co...  19.070391  ...  24.302499
+C(rel_time, contr.treatment(base=-1.0))[1.0]:co...  18.063991  ...  23.341262
+C(rel_time, contr.treatment(base=-1.0))[2.0]:co...  20.176139  ...  24.220200
+C(rel_time, contr.treatment(base=-1.0))[3.0]:co...  21.681289  ...  24.931020
+C(rel_time, contr.treatment(base=-1.0))[4.0]:co...  19.834508  ...  23.032820
+...                                                       ...  ...        ...
+C(rel_time, contr.treatment(base=-1.0))[-17.0]:...  45.056078  ...  65.472071
+C(rel_time, contr.treatment(base=-1.0))[-16.0]:...  44.596740  ...  65.412616
+C(rel_time, contr.treatment(base=-1.0))[-15.0]:...  43.621998  ...  64.719162
+C(rel_time, contr.treatment(base=-1.0))[-14.0]:...  43.551379  ...  64.384213
+C(rel_time, contr.treatment(base=-1.0))[-13.0]:...  39.405930  ...  62.967558
+
+[249 rows x 6 columns]
+
+  Sun & Abraham ATT decomposition printed above.
+  Look for ATT-related rows and event-time coefficients.
 
 ============================================================
   Sub-Saharan Africa — Tertiary Enrollment (%)
   N countries=46, N obs=553
 ============================================================
-  ERROR: Unable to evaluate factor `sunab(g, year)`. [NameError: name 'sunab' is not defined]
+                                                    Estimate  ...     97.5%
+Coefficient                                                   ...          
+C(rel_time, contr.treatment(base=-1.0))[0.0]:co... -1.415611  ...  5.807227
+C(rel_time, contr.treatment(base=-1.0))[1.0]:co...  0.771947  ...  9.042503
+C(rel_time, contr.treatment(base=-1.0))[2.0]:co...  1.229627  ...  8.460819
+C(rel_time, contr.treatment(base=-1.0))[3.0]:co...  1.438063  ...  8.686595
+C(rel_time, contr.treatment(base=-1.0))[4.0]:co...  1.797237  ...  8.171369
+...                                                      ...  ...       ...
+C(rel_time, contr.treatment(base=-1.0))[0.0]:co... -3.021105  ...  2.455217
+C(rel_time, contr.treatment(base=-1.0))[1.0]:co... -2.117399  ...  3.792557
+C(rel_time, contr.treatment(base=-1.0))[2.0]:co... -8.495315  ...  9.891107
+C(rel_time, contr.treatment(base=-1.0))[3.0]:co... -1.795146  ...  3.320307
+C(rel_time, contr.treatment(base=-1.0))[4.0]:co... -2.454064  ...  1.566032
+
+[206 rows x 6 columns]
+
+  Sun & Abraham ATT decomposition printed above.
+  Look for ATT-related rows and event-time coefficients.
 
 
 Done.

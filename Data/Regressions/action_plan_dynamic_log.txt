@@ -1,86 +1,23 @@
 =================================================================
   ACTION PLAN DYNAMIC DiD
-  Key insight: if effects take 5-6 years to materialize,
-  the 2016 Action Plan effects should appear 2021-2023
-  Panel runs to 2023 so we can just barely test this
+  Panel: 205 countries, 2000-2023
+  Post-2016 education investment treatment
+  Lag(5) = 2021, Lag(6) = 2022 — where we expect effects
 =================================================================
 
 Countries crossing $10M edu investment post-2016: 43
-Countries in full panel: 251
-Treated (post-2016 edu): 43
-SSA treated:             23
+Treated post-2016 edu (full): 43
+Treated post-2016 edu (SSA):  23
 
 
 #################################################################
   DYNAMIC DiD — POST-2016 EDUCATION INVESTMENT
   Pre-periods: 2013-2015 | Post-periods: 2016-2022
-  Lag(5) = 2021, Lag(6) = 2022 — where we expect effects
 #################################################################
-
-  Secondary Enrollment Gross (%) — Full Panel (N treated=43)
-  Period           Coef       SE       p     
-  ----------------------------------------
-  [Pre-trend] 
-  Pre(3)         -0.943    0.845   0.264     
-  Pre(2)         -1.273    1.322   0.336     
-  Pre(1)         +0.000    0.000   1.000     
-  Lag(0)         -2.909    2.734   0.287     
-  Lag(1)         -4.276    3.300   0.195     
-  Lag(2)         -3.972    3.775   0.293     
-  Lag(3)         -6.846    4.324   0.113     
-  Lag(4)         -5.194    4.768   0.276     
-  Lag(5)        -11.334    5.779   0.050   ** <- expect effect here
-  [N obs=281, 39 countries]
-
-  Secondary Enrollment Gross (%) — Sub-Saharan Africa (N treated=23)
-  Period           Coef       SE       p     
-  ----------------------------------------
-  [Pre-trend] 
-  Pre(3)         -0.364    1.018   0.720     
-  Pre(2)         -1.316    1.543   0.393     
-  Pre(1)         +0.000    0.000   1.000     
-  Lag(0)         -0.849    3.938   0.829     
-  Lag(1)         -3.460    5.059   0.494     
-  Lag(2)         -5.220    5.978   0.383     
-  Lag(3)        -10.927    7.355   0.137     
-  Lag(4)        -11.720    8.844   0.185     
-  Lag(5)        -19.400   10.571   0.066    * <- expect effect here
-  [N obs=142, 21 countries]
-
-  Tertiary Enrollment Gross (%) — Full Panel (N treated=43)
-  Period           Coef       SE       p     
-  ----------------------------------------
-  [Pre-trend] 
-  Pre(3)         +0.450    1.078   0.676     
-  Pre(2)         +1.454    1.641   0.376     
-  Pre(1)         +0.000    0.000   1.000     
-  Lag(0)         +1.535    2.543   0.546     
-  Lag(1)         +1.479    2.798   0.597     
-  Lag(2)         +1.313    3.106   0.673     
-  Lag(3)         +1.259    3.406   0.712     
-  Lag(4)         +0.826    4.265   0.846     
-  Lag(5)         +0.958    4.701   0.838      <- expect effect here
-  [N obs=252, 35 countries]
-
-  Tertiary Enrollment Gross (%) — Sub-Saharan Africa (N treated=23)
-  Period           Coef       SE       p     
-  ----------------------------------------
-  [Pre-trend] 
-  Pre(3)         +0.703    0.582   0.227     
-  Pre(2)         +1.218    0.991   0.219     
-  Pre(1)         +0.000    0.000   1.000     
-  Lag(0)         +2.459    1.813   0.175     
-  Lag(1)         +3.200    2.282   0.161     
-  Lag(2)         +4.133    3.013   0.170     
-  Lag(3)         +6.068    3.985   0.128     
-  Lag(4)         +5.924    4.845   0.221     
-  Lag(5)         +7.484    5.890   0.204      <- expect effect here
-  [N obs=128, 19 countries]
 
   Primary Enrollment Gross (%) — Full Panel (N treated=43)
   Period           Coef       SE       p     
   ----------------------------------------
-  [Pre-trend] 
   Pre(3)         -0.736    2.125   0.729     
   Pre(2)         -0.745    2.691   0.782     
   Pre(1)         +0.000    0.000   1.000     
@@ -95,7 +32,6 @@ SSA treated:             23
   Primary Enrollment Gross (%) — Sub-Saharan Africa (N treated=23)
   Period           Coef       SE       p     
   ----------------------------------------
-  [Pre-trend] 
   Pre(3)         +2.569    6.821   0.706     
   Pre(2)         +2.996    8.747   0.732     
   Pre(1)         +0.000    0.000   1.000     
@@ -106,6 +42,342 @@ SSA treated:             23
   Lag(4)        -10.891   27.836   0.696     
   Lag(5)        -16.700   31.982   0.602      <- expect effect here
   [N obs=170, 23 countries]
+
+  Primary Gross Female (%) — Full Panel (N treated=43)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         -1.098    2.025   0.587     
+  Pre(2)         -0.980    2.630   0.709     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         -0.534    3.627   0.883     
+  Lag(1)         -1.339    4.465   0.764     
+  Lag(2)         -1.236    4.961   0.803     
+  Lag(3)         -3.595    6.418   0.575     
+  Lag(4)         -5.842    7.325   0.425     
+  Lag(5)         -9.265    8.164   0.256      <- expect effect here
+  [N obs=333, 41 countries]
+
+  Primary Gross Female (%) — Sub-Saharan Africa (N treated=23)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         +2.046    6.686   0.760     
+  Pre(2)         +2.562    8.743   0.770     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         +3.362   13.896   0.809     
+  Lag(1)         -0.080   17.494   0.996     
+  Lag(2)         -3.136   20.126   0.876     
+  Lag(3)         -9.821   25.569   0.701     
+  Lag(4)        -14.026   28.304   0.620     
+  Lag(5)        -20.667   32.556   0.526      <- expect effect here
+  [N obs=169, 23 countries]
+
+  Primary Gross Male (%) — Full Panel (N treated=43)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         -0.879    2.305   0.703     
+  Pre(2)         -0.991    2.855   0.728     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         -0.227    3.848   0.953     
+  Lag(1)         -0.763    4.729   0.872     
+  Lag(2)         -0.664    5.303   0.900     
+  Lag(3)         -2.677    6.696   0.689     
+  Lag(4)         -5.307    7.458   0.477     
+  Lag(5)         -6.574    8.430   0.436      <- expect effect here
+  [N obs=333, 41 countries]
+
+  Primary Gross Male (%) — Sub-Saharan Africa (N treated=23)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         +2.916    7.241   0.687     
+  Pre(2)         +3.435    9.096   0.706     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         +5.217   14.176   0.713     
+  Lag(1)         +2.534   17.815   0.887     
+  Lag(2)         -0.284   20.428   0.989     
+  Lag(3)         -5.484   25.693   0.831     
+  Lag(4)         -7.664   28.457   0.788     
+  Lag(5)        -12.750   32.629   0.696      <- expect effect here
+  [N obs=169, 23 countries]
+
+  Secondary Enrollment Gross (%) — Full Panel (N treated=43)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         -0.943    0.845   0.264     
+  Pre(2)         -1.273    1.322   0.336     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         -2.909    2.734   0.287     
+  Lag(1)         -4.276    3.300   0.195     
+  Lag(2)         -3.972    3.775   0.293     
+  Lag(3)         -6.846    4.324   0.113     
+  Lag(4)         -5.194    4.768   0.276     
+  Lag(5)        -11.334    5.779   0.050   ** <- expect effect here
+  [N obs=281, 39 countries]
+
+  Secondary Enrollment Gross (%) — Sub-Saharan Africa (N treated=23)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         -0.364    1.018   0.720     
+  Pre(2)         -1.316    1.543   0.393     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         -0.849    3.938   0.829     
+  Lag(1)         -3.460    5.059   0.494     
+  Lag(2)         -5.220    5.978   0.383     
+  Lag(3)        -10.927    7.355   0.137     
+  Lag(4)        -11.720    8.844   0.185     
+  Lag(5)        -19.400   10.571   0.066    * <- expect effect here
+  [N obs=142, 21 countries]
+
+  Secondary Gross Female (%) — Full Panel (N treated=43)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         -0.865    0.966   0.371     
+  Pre(2)         -0.853    1.533   0.578     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         -2.345    2.807   0.403     
+  Lag(1)         -3.608    3.517   0.305     
+  Lag(2)         -3.968    4.086   0.332     
+  Lag(3)         -7.217    4.699   0.125     
+  Lag(4)         -5.785    5.233   0.269     
+  Lag(5)        -13.230    6.358   0.037   ** <- expect effect here
+  [N obs=274, 39 countries]
+
+  Secondary Gross Female (%) — Sub-Saharan Africa (N treated=23)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         -0.974    1.168   0.404     
+  Pre(2)         -1.511    1.611   0.348     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         -2.359    4.069   0.562     
+  Lag(1)         -5.509    5.231   0.292     
+  Lag(2)         -8.065    6.079   0.185     
+  Lag(3)        -15.351    7.195   0.033   **
+  Lag(4)        -16.746    8.411   0.046   **
+  Lag(5)        -26.647   10.068   0.008  *** <- expect effect here
+  [N obs=141, 21 countries]
+
+  Secondary Gross Male (%) — Full Panel (N treated=43)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         -0.672    0.878   0.444     
+  Pre(2)         -0.714    1.296   0.582     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         -1.837    2.557   0.473     
+  Lag(1)         -3.476    3.083   0.260     
+  Lag(2)         -3.687    3.636   0.311     
+  Lag(3)         -6.690    4.133   0.105     
+  Lag(4)         -5.151    4.661   0.269     
+  Lag(5)        -10.705    5.725   0.061    * <- expect effect here
+  [N obs=274, 39 countries]
+
+  Secondary Gross Male (%) — Sub-Saharan Africa (N treated=23)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         -0.425    1.298   0.743     
+  Pre(2)         -0.757    1.670   0.650     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         +0.692    4.183   0.869     
+  Lag(1)         -1.368    5.413   0.800     
+  Lag(2)         -2.470    6.452   0.702     
+  Lag(3)         -6.679    8.143   0.412     
+  Lag(4)         -7.191    9.883   0.467     
+  Lag(5)        -12.765   11.790   0.279      <- expect effect here
+  [N obs=141, 21 countries]
+
+  Secondary Gender Gap Gross (pp) — Full Panel (N treated=43)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         -0.193    0.471   0.682     
+  Pre(2)         -0.139    0.533   0.794     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         -0.508    0.824   0.537     
+  Lag(1)         -0.132    1.064   0.901     
+  Lag(2)         -0.281    1.199   0.815     
+  Lag(3)         -0.527    1.341   0.694     
+  Lag(4)         -0.634    2.585   0.806     
+  Lag(5)         -2.525    2.481   0.309      <- expect effect here
+  [N obs=274, 39 countries]
+
+  Secondary Gender Gap Gross (pp) — Sub-Saharan Africa (N treated=23)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         -0.549    0.496   0.268     
+  Pre(2)         -0.754    0.513   0.141     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         -3.050    0.974   0.002  ***
+  Lag(1)         -4.140    1.179   0.000  ***
+  Lag(2)         -5.595    1.624   0.001  ***
+  Lag(3)         -8.672    2.228   0.000  ***
+  Lag(4)         -9.555    3.005   0.001  ***
+  Lag(5)        -13.881    3.313   0.000  *** <- expect effect here
+  [N obs=141, 21 countries]
+
+  Tertiary Enrollment Gross (%) — Full Panel (N treated=43)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         +0.450    1.078   0.676     
+  Pre(2)         +1.454    1.641   0.376     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         +1.535    2.543   0.546     
+  Lag(1)         +1.479    2.798   0.597     
+  Lag(2)         +1.313    3.106   0.673     
+  Lag(3)         +1.259    3.406   0.712     
+  Lag(4)         +0.826    4.265   0.846     
+  Lag(5)         +0.958    4.701   0.838      <- expect effect here
+  [N obs=252, 35 countries]
+
+  Tertiary Enrollment Gross (%) — Sub-Saharan Africa (N treated=23)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         +0.703    0.582   0.227     
+  Pre(2)         +1.218    0.991   0.219     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         +2.459    1.813   0.175     
+  Lag(1)         +3.200    2.282   0.161     
+  Lag(2)         +4.133    3.013   0.170     
+  Lag(3)         +6.068    3.985   0.128     
+  Lag(4)         +5.924    4.845   0.221     
+  Lag(5)         +7.484    5.890   0.204      <- expect effect here
+  [N obs=128, 19 countries]
+
+  Tertiary Gross Female (%) — Full Panel (N treated=43)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         +0.227    1.679   0.893     
+  Pre(2)         +1.276    2.489   0.608     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         +0.953    3.473   0.784     
+  Lag(1)         +0.789    3.819   0.836     
+  Lag(2)         +0.466    4.258   0.913     
+  Lag(3)         +0.820    4.807   0.864     
+  Lag(4)         +0.566    5.618   0.920     
+  Lag(5)         +1.203    6.386   0.851      <- expect effect here
+  [N obs=247, 35 countries]
+
+  Tertiary Gross Female (%) — Sub-Saharan Africa (N treated=23)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         +0.449    0.527   0.395     
+  Pre(2)         +1.353    0.912   0.138     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         +3.375    1.972   0.087    *
+  Lag(1)         +4.770    2.772   0.085    *
+  Lag(2)         +6.172    3.788   0.103     
+  Lag(3)         +9.249    5.198   0.075    *
+  Lag(4)         +9.199    6.413   0.151     
+  Lag(5)        +10.560    7.656   0.168      <- expect effect here
+  [N obs=125, 19 countries]
+
+  Tertiary Gross Male (%) — Full Panel (N treated=43)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         +0.814    0.915   0.373     
+  Pre(2)         +1.872    1.200   0.119     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         +2.497    2.180   0.252     
+  Lag(1)         +2.608    2.362   0.270     
+  Lag(2)         +2.540    2.487   0.307     
+  Lag(3)         +2.281    2.614   0.383     
+  Lag(4)         +1.674    3.445   0.627     
+  Lag(5)         +1.704    3.581   0.634      <- expect effect here
+  [N obs=247, 35 countries]
+
+  Tertiary Gross Male (%) — Sub-Saharan Africa (N treated=23)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         +0.360    0.533   0.500     
+  Pre(2)         +0.841    0.997   0.399     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         +1.280    1.666   0.442     
+  Lag(1)         +1.350    2.007   0.501     
+  Lag(2)         +1.763    2.528   0.485     
+  Lag(3)         +2.639    3.210   0.411     
+  Lag(4)         +2.188    3.670   0.551     
+  Lag(5)         +3.630    4.529   0.423      <- expect effect here
+  [N obs=125, 19 countries]
+
+  Avg Years of Schooling (adults) — Full Panel (N treated=43)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         +0.038    0.051   0.448     
+  Pre(2)         +0.028    0.083   0.739     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         +0.094    0.177   0.594     
+  Lag(1)         +0.109    0.221   0.621     
+  Lag(2)         +0.131    0.268   0.625     
+  Lag(3)         +0.034    0.335   0.919     
+  Lag(4)         -0.183    0.406   0.653     
+  Lag(5)         -0.177    0.504   0.725      <- expect effect here
+  [N obs=353, 41 countries]
+
+  Avg Years of Schooling (adults) — Sub-Saharan Africa (N treated=23)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         +0.002    0.076   0.976     
+  Pre(2)         -0.021    0.141   0.884     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         -0.026    0.278   0.925     
+  Lag(1)         +0.003    0.346   0.992     
+  Lag(2)         +0.087    0.434   0.840     
+  Lag(3)         +0.088    0.555   0.873     
+  Lag(4)         -0.043    0.640   0.947     
+  Lag(5)         +0.016    0.789   0.984      <- expect effect here
+  [N obs=186, 23 countries]
+
+  Female Employment Ratio (%) — Full Panel (N treated=43)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         -0.867    0.408   0.034   **
+  Pre(2)         -0.731    0.548   0.182     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         -1.090    0.943   0.248     
+  Lag(1)         -1.168    1.164   0.316     
+  Lag(2)         -1.262    1.432   0.378     
+  Lag(3)         -1.542    1.772   0.384     
+  Lag(4)         -1.420    2.011   0.480     
+  Lag(5)         -2.972    2.863   0.299      <- expect effect here
+  [N obs=343, 40 countries]
+
+  Female Employment Ratio (%) — Sub-Saharan Africa (N treated=23)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         -0.348    0.695   0.617     
+  Pre(2)         +0.009    1.027   0.993     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         -0.694    1.858   0.709     
+  Lag(1)         -1.390    2.550   0.585     
+  Lag(2)         -1.753    3.251   0.590     
+  Lag(3)         -2.680    3.840   0.485     
+  Lag(4)         -2.761    4.578   0.547     
+  Lag(5)         -4.503    5.424   0.406      <- expect effect here
+  [N obs=186, 23 countries]
+
+  GDP Growth (%) — Full Panel (N treated=43)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         +2.286    0.716   0.001  ***
+  Pre(2)         +2.020    0.835   0.016   **
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         +3.309    1.600   0.039   **
+  Lag(1)         +2.965    1.570   0.059    *
+  Lag(2)         +4.489    2.613   0.086    *
+  Lag(3)         +4.914    2.211   0.026   **
+  Lag(4)         +1.797    2.400   0.454     
+  Lag(5)         +7.724    3.349   0.021   ** <- expect effect here
+  [N obs=353, 41 countries]
+
+  GDP Growth (%) — Sub-Saharan Africa (N treated=23)
+  Period           Coef       SE       p     
+  ----------------------------------------
+  Pre(3)         +2.646    2.036   0.194     
+  Pre(2)         +2.485    2.684   0.355     
+  Pre(1)         +0.000    0.000   1.000     
+  Lag(0)         +2.393    5.143   0.642     
+  Lag(1)         +1.116    6.371   0.861     
+  Lag(2)         +0.305    7.614   0.968     
+  Lag(3)         -0.510    8.943   0.954     
+  Lag(4)         -4.121   10.150   0.685     
+  Lag(5)         +0.270   11.532   0.981      <- expect effect here
+  [N obs=186, 23 countries]
 
 
 Done.
